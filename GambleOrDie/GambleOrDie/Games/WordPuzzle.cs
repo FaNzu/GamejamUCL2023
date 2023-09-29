@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
+using System.Timers;
 
 
 namespace GambleOrDie.Games
@@ -12,7 +12,7 @@ namespace GambleOrDie.Games
     class WordPuzzle
     {
         private static char[,] alrPlacedWords;
-        string[] allwords = {
+        private string[] allwords = {
                 "HELLO", "DOOR", "NINE", "EIGHT",
                 "APPLE", "BANANA", "ORANGE", "MANGO", "STRAWBERRY",
                 "CAR", "BUS", "TRAIN", "PLANE", "SHIP",
@@ -20,12 +20,13 @@ namespace GambleOrDie.Games
                 "HOUSE", "SCHOOL", "PARK", "HOSPITAL", "LIBRARY",
                 "COMPUTER", "PHONE", "TABLE", "CHAIR", "BOOK"
             };
-        List<string> selectedWords = new List<string>();
+        private List<string> selectedWords = new List<string>();
+        private static System.Timers.Timer aTimer;
+        private static bool _timerActive = true;
+        DateTime startTime;
 
 
-
-
-        static char[,] PlaceWord(string word, char[,] grid, Random random, int width, int height, int difficulty)
+        private static char[,] PlaceWord(string word, char[,] grid, Random random, int width, int height, int difficulty)
         {
             if (alrPlacedWords == null)
             {
@@ -55,12 +56,12 @@ namespace GambleOrDie.Games
             if (direction[0] == 0)
                 xStart = width;
             else
-                xStart = width - word.Length - 1;
+                xStart = width - word.Length;
 
             if (direction[1] == 0)
                 yStart = height;
             else
-                yStart = height - word.Length - 1;
+                yStart = height - word.Length;
 
             int x = random.Next(0, xStart);
             int y = random.Next(0, yStart);
@@ -91,14 +92,14 @@ namespace GambleOrDie.Games
             Random random = new Random();
 
             int difficulty = 1; // lav logic der styre sværhedsgrads
-            
+
             //fills grid with random letters
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    //grid[i, j] = (char)' ';
-                    grid[i, j] = (char)('A' + random.Next(26)); //fyld grid ud med bogstaver
+                    grid[i, j] = (char)' ';
+                    //grid[i, j] = (char)('A' + random.Next(26)); //fyld grid ud med bogstaver
                 }
             }
 
@@ -113,25 +114,63 @@ namespace GambleOrDie.Games
                     selectedWords.Add(selectedWord);
                 else
                     i--;
-                    // If the word is a duplicate, decrease the loop counter to select another word
+                // If the word is a duplicate, decrease the loop counter to select another word
             }
 
-            foreach(string word in selectedWords) // place words on board, overriding the previous letter
+            foreach (string word in selectedWords) // place words on board, overriding the previous letter
             {
                 PlaceWord(word, grid, random, width, height, difficulty);
             }
 
+            StringBuilder stringBuilder = new StringBuilder();
             // Display the word search puzzle
-            Console.WriteLine("Word Search Puzzle:");
+            Console.WriteLine("Word Search Puzzle: ");
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
-                    Console.Write(grid[j, i] + " ");
+                    stringBuilder.Append(grid[j, i] + " ");
                 }
-                Console.WriteLine();
+                stringBuilder.Append('\n');
             }
+            startTime = DateTime.Now;
+            Console.WriteLine(stringBuilder);
+            bool victory = isValidInput();
+            Console.WriteLine(victory.ToString());
+            Console.ReadLine();
+        }
 
+        private bool isValidInput()
+        {
+            List<string> correctlyGuessedWords = new List<string>();
+            //list of words the player has guessed correct
+            do
+            {
+                var timerValue = DateTime.Now - startTime;
+                if (timerValue.TotalSeconds <= 20) //the time has player 
+                {
+                    string input = Console.ReadLine().ToUpper();//input
+                    if (selectedWords.Contains(input))//if the word player guessed is on the board
+                    {
+                        Console.WriteLine("You guessed right");
+                        correctlyGuessedWords.Add(input); //add to the list
+                    }
+                    else
+                    {
+                        Console.WriteLine("wrong guess");
+                        //remove life according to difficulty
+                    }
+                }
+                else
+                {
+                    _timerActive = false;
+                }
+                Console.Error.WriteLine($"you have {timerValue.TotalSeconds-60} left");
+            } while (_timerActive);
+            Console.WriteLine("\ntime has run out\n");
+            Console.WriteLine($"you correctly guessed {correctlyGuessedWords.Count()}/{selectedWords.Count()}");
+
+            return ((correctlyGuessedWords.Count()/selectedWords.Count())==1 ? true : false);
         }
     }
 }
