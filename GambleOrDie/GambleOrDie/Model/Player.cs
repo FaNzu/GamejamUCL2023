@@ -12,12 +12,12 @@ namespace GambleOrDie.Model
 		public string Name { get; set; }
 		public List<Item> Items { get; set; }
 		public int Strikes { get; set; }
-		public int Highscore { get; set; }
+		public int Score { get; set; }
 		public Player(string name) 
 		{
 			Items = new List<Item>();
 			Strikes = 3;
-			Highscore = 0;
+			Score = 0;
 			Name = name;
 			Coins = 10;
 		}

@@ -1,0 +1,6 @@
+﻿StakeRange
+
+Score:
+1-100, Diff = 1, StakeRange min 10 max 25
+100-200, Diff = 2, StakeRange min 10 max 50
+200-300, Diff = 3, StakeRange min 10 max 75
