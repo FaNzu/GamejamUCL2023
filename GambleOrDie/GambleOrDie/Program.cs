@@ -1,10 +1,15 @@
-﻿namespace GambleOrDie
+﻿using GambleOrDie.GameLogic;
+using GambleOrDie.Model;
+
+namespace GambleOrDie
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Player player = new Player("Player1");
+            Menu menu = new Menu(player);
+            menu.StartMenu();
         }
     }
 }

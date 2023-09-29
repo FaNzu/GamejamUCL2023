@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
-namespace GambleOrDie.Games
+namespace GambleOrDie.Model
 {
-    public class WordPuzzle
-    {
-        
-    }
+	public enum Effects
+	{
+		TimeAdder,
+		TimeRemover,
+		Hint
+	}
 }
