@@ -1,4 +1,7 @@
-﻿using GambleOrDie.Games;
+﻿using GambleOrDie.GameLogic;
+using GambleOrDie.Model;
+
+using GambleOrDie.Games;
 
 namespace GambleOrDie
 {
@@ -6,9 +9,9 @@ namespace GambleOrDie
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-            WordPuzzle wbs = new WordPuzzle();
-            wbs.board();
+            Player player = new Player("Player1");
+            Menu menu = new Menu(player);
+            menu.StartMenu();
         }
     }
 }
