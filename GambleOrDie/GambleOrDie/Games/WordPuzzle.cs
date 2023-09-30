@@ -165,12 +165,12 @@ namespace GambleOrDie.Games
                 {
                     _timerActive = false;
                 }
-                Console.Error.WriteLine($"you have {timerValue.TotalSeconds-60} left");
+                Console.Error.WriteLine($"you have {60-timerValue.TotalSeconds} left");
             } while (_timerActive);
             Console.WriteLine("\ntime has run out\n");
             Console.WriteLine($"you correctly guessed {correctlyGuessedWords.Count()}/{selectedWords.Count()}");
 
-            return ((correctlyGuessedWords.Count()/selectedWords.Count())==1 ? true : false);
+            return ((correctlyGuessedWords.Count()/selectedWords.Count())==1 ? true : false); //if player guessed all words return true
         }
     }
 }
