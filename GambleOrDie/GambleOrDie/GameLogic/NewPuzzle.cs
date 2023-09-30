@@ -200,7 +200,6 @@ namespace GambleOrDie.GameLogic
 					//START NEW GAME AND BET COINS
 					case 0:
 
-						Wordle puzzle = new Wordle();
 
 						Console.Clear();
 						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
@@ -215,6 +214,11 @@ namespace GambleOrDie.GameLogic
 						Console.WriteLine("Press ENTER to start the game");
 						Console.ReadLine();
 						Console.Clear();
+
+						//should make a randomizer, or make a order of games to appear
+						Wordle puzzle = new Wordle();
+						//Anagram puzzle = new Anagram();
+						//WordPuzzle puzzle = new WordPuzzle();
 						if (puzzle.board(1))
 						{
 							VictoryScenario();
