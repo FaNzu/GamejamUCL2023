@@ -40,10 +40,10 @@ namespace GambleOrDie.GameLogic
 					switch (key.Key)
 					{
 						case ConsoleKey.UpArrow:
-							option = option == 0 ? 5 : option - 1;
+							option = option == 0 ? 1 : option - 1;
 							break;
 						case ConsoleKey.DownArrow:
-							option = option == 5 ? 0 : option + 1;
+							option = option == 1 ? 0 : option + 1;
 							break;
 						case ConsoleKey.Enter:
 							isSelected = true;
