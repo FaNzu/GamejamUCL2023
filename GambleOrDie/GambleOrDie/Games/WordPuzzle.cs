@@ -11,6 +11,8 @@ namespace GambleOrDie.Games
 {
     class WordPuzzle
     {
+        int width = 10;
+        int height = 10;
         private static char[,] alrPlacedWords;
         private string[] allwords = {
                 "HELLO", "DOOR", "NINE", "EIGHT",
@@ -86,9 +88,7 @@ namespace GambleOrDie.Games
 
         public bool board(int? difficultyGiven)
         {
-            difficulty = difficultyGiven!=null ? difficultyGiven.Value : 1;
-            int width = 10;
-            int height = 10;
+            difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
             char[,] grid = new char[width, height];
             Random random = new Random();
 
@@ -133,9 +133,9 @@ namespace GambleOrDie.Games
                 }
                 stringBuilder.Append('\n');
             }
-            startTime = DateTime.Now;
+            bool victory = false;//game starts losing
             Console.WriteLine(stringBuilder);
-            bool victory = isValidInput();
+            victory = isValidInput(); //change victory if player won
             Console.WriteLine(victory.ToString());
             Console.ReadLine();
             return victory;
@@ -143,32 +143,40 @@ namespace GambleOrDie.Games
 
         private bool isValidInput()
         {
+            TimeOnly startTime = TimeOnly.FromDateTime(DateTime.Now);
+            TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, 20)); //60 is time in total for puzzle
+            int lives = 3; //adjust with difficulty
             List<string> correctlyGuessedWords = new List<string>();
             //list of words the player has guessed correct
-            do
+            while (TimeOnly.FromDateTime(DateTime.Now) < endTime && lives >0) // if the specified amount of time hasn't passed yet
             {
-                var timerValue = DateTime.Now - startTime;
-                if (timerValue.TotalSeconds <= 20) //the time has player 
+                Console.SetCursorPosition(0, 12 + height);
+                Console.WriteLine(new string(' ', Console.WindowWidth - 10)); // Clears the line from column 10 to the end
+                Console.WriteLine($"you have {lives} lives yet");
+
+                Console.SetCursorPosition(10, 12 + height);
+                Console.Write("Type: ");
+                string input = Console.ReadLine().ToUpper();//input
+                if (selectedWords.Contains(input) && !correctlyGuessedWords.Contains(input))//if the word player guessed is on the board
                 {
-                    string input = Console.ReadLine().ToUpper();//input
-                    if (selectedWords.Contains(input))//if the word player guessed is on the board
-                    {
-                        Console.WriteLine("You guessed right");
-                        correctlyGuessedWords.Add(input); //add to the list
-                    }
-                    else
-                    {
-                        Console.WriteLine("wrong guess");
-                        //remove life according to difficulty
-                    }
+                    Console.WriteLine("You guessed right");
+                    correctlyGuessedWords.Add(input); //add to the list
                 }
+                else if (correctlyGuessedWords.Contains(input))
+                    Console.WriteLine("You've already guessed this!");
                 else
                 {
-                    _timerActive = false;
+                    Console.WriteLine("wrong guess");
+                    //remove life according to difficulty
+                    lives--;
                 }
-                Console.Error.WriteLine($"you have {60 - timerValue.TotalSeconds} left");
-            } while (_timerActive);
-            Console.WriteLine("\ntime has run out\n");
+
+                Console.Error.WriteLine($"you have {endTime - TimeOnly.FromDateTime(DateTime.Now)} left");
+            }
+            if (lives <= 0)
+                Console.WriteLine("\nYou ran out of lives\n");
+            else
+                Console.WriteLine("\ntime has run out\n");
             Console.WriteLine($"you correctly guessed {correctlyGuessedWords.Count()}/{selectedWords.Count()}");
 
             return ((correctlyGuessedWords.Count() / selectedWords.Count()) == 1 ? true : false); //if player guessed all words return true
