@@ -39,10 +39,10 @@ namespace GambleOrDie.GameLogic
 					switch (key.Key)
 					{
 						case ConsoleKey.UpArrow:
-							option = option == 0 ? 5 : option - 1;
+							option = option == 0 ? 3 : option - 1;
 							break;
 						case ConsoleKey.DownArrow:
-							option = option == 5 ? 0 : option + 1;
+							option = option == 3 ? 0 : option + 1;
 							break;
 						case ConsoleKey.Enter:
 							isSelected = true;
@@ -73,7 +73,6 @@ namespace GambleOrDie.GameLogic
 						isFocused = false;
 						break;
 				}
-				Console.ReadKey();
 			}
 		}
 	}
