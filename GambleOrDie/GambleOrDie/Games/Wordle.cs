@@ -95,7 +95,7 @@ namespace GambleOrDie.Games
                 }
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("The Word Was: " + theWord);
-            }
+                }
             Console.ReadLine();
             //Wait Before Closing
             return victory;

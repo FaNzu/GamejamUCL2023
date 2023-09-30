@@ -199,6 +199,7 @@ namespace GambleOrDie.GameLogic
 				{
 					//START NEW GAME AND BET COINS
 					case 0:
+
 						Wordle puzzle = new Wordle();
 
 						Console.Clear();
