@@ -98,8 +98,8 @@ namespace GambleOrDie.Games
             {
                 for (int j = 0; j < height; j++)
                 {
-                    grid[i, j] = (char)' ';
-                    //grid[i, j] = (char)('A' + random.Next(26)); //fyld grid ud med bogstaver
+                   // grid[i, j] = (char)' ';
+                    grid[i, j] = (char)('A' + random.Next(26)); //fyld grid ud med bogstaver
                 }
             }
 

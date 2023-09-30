@@ -55,7 +55,7 @@ namespace GambleOrDie.Events
 				try
 				{
 					bet = Console.ReadLine();
-					if (Convert.ToInt32(bet) > _player.Coins)
+					if (Convert.ToInt32(bet) < _player.Coins)
 					{
 						_player.Coins -= Convert.ToInt32(bet);
 						check = false;
@@ -112,12 +112,14 @@ namespace GambleOrDie.Events
 				Console.WriteLine($"Coins won {coinsWon}");
 				_player.Coins += coinsWon;
 				Console.WriteLine($"New coin balance {_player.Coins}");
+				Console.ReadKey();
 			}
 			if (playerChoice != result)
 			{
 				//Write code that subtracts the bet coins
 				Console.WriteLine("You lost the bet...");
 				Console.WriteLine($"New coin balance {_player.Coins}");
+				Console.ReadKey();
 			}
 		}
 	}
