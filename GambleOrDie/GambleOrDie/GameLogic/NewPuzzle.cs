@@ -136,7 +136,7 @@ namespace GambleOrDie.GameLogic
 				{
 					//START NEW GAME AND BET COINS
 					case 0:
-						WordPuzzle puzzle = new WordPuzzle();
+						Anagram puzzle = new Anagram();
 						bool betNotConfirmed = true;
 						while (betNotConfirmed)
 						{

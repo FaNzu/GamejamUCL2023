@@ -1,187 +1,37 @@
 ﻿using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace GambleOrDie.Games
 {
     internal class Wordle
     {
-        public void board()
+        public void board(int? difficultyGiven)
         {
 
-            List<string> Words = new List<string>();
-
-            //Word List  
-            Words.Add("adult");
-            Words.Add("agent");
-            Words.Add("anger");
-            Words.Add("apple");
-            Words.Add("award");
-            Words.Add("beach");
-            Words.Add("birth");
-            Words.Add("block");
-            Words.Add("board");
-            Words.Add("brain");
-            Words.Add("bread");
-            Words.Add("break");
-            Words.Add("brown");
-            Words.Add("brand");
-            Words.Add("beast");
-            Words.Add("bench");
-            Words.Add("cello");
-            Words.Add("beans");
-            Words.Add("brave");
-            Words.Add("brass");
-            Words.Add("grass");
-            Words.Add("green");
-            Words.Add("mouse");
-            Words.Add("bored");
-            Words.Add("board");
-            Words.Add("beard");
-            Words.Add("phone");
-            Words.Add("brick");
-            Words.Add("breed");
-            Words.Add("plane");
-            Words.Add("plank");
-            Words.Add("squat");
-            Words.Add("camel");
-            Words.Add("crown");
-            Words.Add("crate");
-            Words.Add("creed");
-            Words.Add("greed");
-            Words.Add("plead");
-            Words.Add("speed");
-            Words.Add("steed");
-            Words.Add("carry");
-            Words.Add("curry");
-            Words.Add("hurry");
-            Words.Add("cause");
-            Words.Add("chain");
-            Words.Add("motto");
-            Words.Add("count");
-            Words.Add("glass");
-            Words.Add("candy");
-            Words.Add("laugh");
-            Words.Add("anime");
-            Words.Add("manga");
-            Words.Add("demon");
-            Words.Add("scare");
-            Words.Add("stole");
-            Words.Add("stand");
-            Words.Add("sheet");
-            Words.Add("music");
-            Words.Add("staff");
-            Words.Add("steal");
-            Words.Add("panda");
-            Words.Add("print");
-            Words.Add("perch");
-            Words.Add("parch");
-            Words.Add("purse");
-            Words.Add("craft");
-            Words.Add("close");
-            Words.Add("clash");
-            Words.Add("clock");
-            Words.Add("cream");
-            Words.Add("climb");
-            Words.Add("gongs");
-            Words.Add("power");
-            Words.Add("snake");
-            Words.Add("badge");
-            Words.Add("paper");
-            Words.Add("chair");
-            Words.Add("table");
-            Words.Add("spoon");
-            Words.Add("knife");
-            Words.Add("plate");
-            Words.Add("pasta");
-            Words.Add("spill");
-            Words.Add("spork");
-            Words.Add("sport");
-            Words.Add("trash");
-            Words.Add("model");
-            Words.Add("chest");
-            Words.Add("limit");
-            Words.Add("cloud");
-            Words.Add("chief");
-            Words.Add("spine");
-            Words.Add("boing");
-            Words.Add("chore");
-            Words.Add("paint");
-            Words.Add("white");
-            Words.Add("black");
-            Words.Add("child");
-            Words.Add("coast");
-            Words.Add("night");
-            Words.Add("human");
-            Words.Add("puppy");
-            Words.Add("zebra");
-            Words.Add("sound");
-            Words.Add("chime");
-            Words.Add("river");
-            Words.Add("piano");
-            Words.Add("shirt");
-            Words.Add("under");
-            Words.Add("haven");
-            Words.Add("ghost");
-            Words.Add("scarf");
-            Words.Add("grill");
-            Words.Add("chill");
-            Words.Add("crack");
-            Words.Add("sugar");
-            Words.Add("flour");
-            Words.Add("melon");
-            Words.Add("money");
-            Words.Add("mango");
-            Words.Add("bring");
-            Words.Add("broom");
-            Words.Add("sting");
-            Words.Add("steam");
-            Words.Add("smell");
-            Words.Add("taste");
-            Words.Add("sight");
-            Words.Add("touch");
-            Words.Add("voice");
-            Words.Add("speak");
-            Words.Add("after");
-            Words.Add("while");
-            Words.Add("stick");
-            Words.Add("stern");
-            Words.Add("spank");
-            Words.Add("spank");
-            Words.Add("bling");
-            Words.Add("broke");
-            Words.Add("brain");
-            Words.Add("brawl");
-            Words.Add("misty");
-            Words.Add("blink");
-            Words.Add("flame");
-            Words.Add("ditto");
-            Words.Add("drink");
-            Words.Add("koala");
-            Words.Add("clown");
-            Words.Add("hover");
-            Words.Add("cower");
-            Words.Add("cover");
-            Words.Add("tower");
-            Words.Add("glock");
-            Words.Add("roach");
-            Words.Add("harsh");
-            Words.Add("cross");
-            Words.Add("disco");
-            Words.Add("cocoa");
-            Words.Add("slide");
-            Words.Add("aback");
-            Words.Add("acorn");
-            Words.Add("admin");
-            Words.Add("essay");
-            Words.Add("fruit");
-            Words.Add("humor");
-            Words.Add("chant");
-            Words.Add("banjo");
-            Words.Add("cough");
-
+            List<string> Words = new List<string> {
+                "adult", "agent", "anger", "apple", "award", "beach", "birth", "block", "chant", "banjo", "cough", "humor",
+                "board", "brain", "bread", "break", "brown", "brand", "beast", "bench", "cello", "beans", "brave", "brass",
+                "grass", "green", "mouse", "bored", "board", "beard", "phone", "brick", "breed", "plane", "plank", "squat",
+                "camel", "crown", "crate", "creed", "greed", "plead", "speed", "steed", "carry", "curry", "hurry", "cause",
+                "chain", "motto", "count", "glass", "candy", "laugh", "anime", "manga", "demon", "scare", "stole", "stand",
+                "sheet", "music", "staff", "steal", "panda", "print", "perch", "parch", "purse", "craft", "close", "clash",
+                "clock", "cream", "climb", "gongs", "power", "snake", "badge", "paper", "chair", "table", "spoon", "knife",
+                "plate", "pasta", "spill", "spork", "sport", "trash", "model", "chest", "limit", "cloud", "chief", "spine",
+                "boing", "chore", "paint", "white", "black", "child", "coast", "night", "human", "puppy", "zebra", "sound",
+                "chime", "river", "piano", "shirt", "under", "haven", "ghost", "scarf", "grill", "chill", "crack", "sugar",
+                "flour", "melon", "money", "mango", "bring", "broom", "sting", "steam", "smell", "taste", "sight", "touch",
+                "voice", "speak", "after", "while", "stick", "stern", "spank", "spank", "bling", "broke", "brain", "brawl",
+                "misty", "blink", "flame", "ditto", "drink", "koala", "clown", "hover", "cower", "cover", "tower", "glock",
+                "roach", "harsh", "cross", "disco", "cocoa", "slide", "aback", "acorn", "admin", "essay", "fruit", "humor"};
+            int difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
 
 
             //Random Word Picker
@@ -191,659 +41,184 @@ namespace GambleOrDie.Games
 
             //Choices
             Console.WriteLine("Start the game");
-            Console.WriteLine("Old or New Layout?");
-            string answer = Console.ReadLine();
 
-            //New
-            if (answer == "New")
+            //Yes
+            if (difficulty == 3)
             {
-                Console.WriteLine("Do You Want Asian Mode?");
-                answer = Console.ReadLine();
-
-                //Yes
-                if (answer == "Yes")
+                for (int i = 0; i < 1; i++)
                 {
-                    for (int i = 0; i < 1; i++)
-                    {
-                        random = numberGen.Next(0, 163);
-                    }
-                    string theWord = (Words[random]);
-                    Console.WriteLine("Type your first guess (lowercase only)");
-
-                    //Guessing
-
-                    for (int i = 0; i < 7; i++)
-                    {
-                        Console.ForegroundColor = ConsoleColor.White;
-
-                        string guess = Convert.ToString(Console.ReadLine());
-
-                        char a = theWord[0];
-                        char b = theWord[1];
-                        char c = theWord[2];
-                        char d = theWord[3];
-                        char e = theWord[4];
-
-                        char aa = guess[0];
-                        char bb = guess[1];
-                        char cc = guess[2];
-                        char dd = guess[3];
-                        char ee = guess[4];
-
-                        //First Letter Guess
-                        if (a == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(aa);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(aa);
-                        }
-
-                        //Second Letter
-                        if (b == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(bb);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(bb);
-                        }
-
-                        //Third Letter
-                        if (c == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(cc);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(cc);
-                        }
-
-                        //Fourth Letter
-                        if (d == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(dd);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(dd);
-                        }
-
-                        //Fifth Letter
-                        if (e == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(ee);
-                            Console.WriteLine("");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(ee);
-                            Console.WriteLine("");
-                        }
-
-
-                        //Win
-                        if (guess == theWord)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.WriteLine("You did it!");
-                            i = 999;
-                        }
-
-                    }
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("The Word Was: " + theWord);
+                    random = numberGen.Next(0, 163);
                 }
+                string theWord = (Words[random]);
+                Console.WriteLine("Type your first guess (lowercase only)");
 
-                //No
-                else if (answer == "No")
+                //Guessing
+
+                for (int i = 0; i < 7; i++)
                 {
-                    for (int i = 0; i < 1; i++)
-                    {
-                        random = numberGen.Next(0, 163);
-                    }
-                    string theWord = (Words[random]);
-                    Console.WriteLine("Type your first guess (lowercase only)");
-
-                    //Guessing
-
-                    for (int i = 0; i < 9; i++)
-                    {
-                        Console.ForegroundColor = ConsoleColor.White;
-
-                        string guess = Convert.ToString(Console.ReadLine());
-
-                        char a = theWord[0];
-                        char b = theWord[1];
-                        char c = theWord[2];
-                        char d = theWord[3];
-                        char e = theWord[4];
-
-                        char aa = guess[0];
-                        char bb = guess[1];
-                        char cc = guess[2];
-                        char dd = guess[3];
-                        char ee = guess[4];
-
-                        //First Letter
-                        if (a == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(aa);
-                        }
-                        else if (b == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(aa);
-                        }
-                        else if (c == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(aa);
-                        }
-                        else if (d == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(aa);
-                        }
-                        else if (e == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(aa);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(aa);
-                        }
-
-                        //Second Letter
-                        if (b == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(bb);
-                        }
-                        else if (a == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(bb);
-                        }
-                        else if (c == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(bb);
-                        }
-                        else if (d == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(bb);
-                        }
-                        else if (e == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(bb);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(bb);
-                        }
-
-                        //Third Letter
-                        if (c == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(cc);
-                        }
-                        else if (a == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(cc);
-                        }
-                        else if (b == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(cc);
-                        }
-                        else if (d == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(cc);
-                        }
-                        else if (e == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(cc);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(cc);
-                        }
-
-                        //Fourth Letter
-                        if (d == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(dd);
-                        }
-                        else if (a == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(dd);
-                        }
-                        else if (b == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(dd);
-                        }
-                        else if (c == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(dd);
-                        }
-                        else if (e == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(dd);
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(dd);
-                        }
-
-                        //Fifth Letter
-                        if (e == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine(ee);
-                            Console.WriteLine("");
-                        }
-                        else if (a == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(ee);
-                            Console.WriteLine("");
-                        }
-                        else if (b == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(ee);
-                            Console.WriteLine("");
-                        }
-                        else if (c == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(ee);
-                            Console.WriteLine("");
-                        }
-                        else if (d == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine(ee);
-                            Console.WriteLine("");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine(ee);
-                            Console.WriteLine("");
-                        }
-
-                        //Win
-                        if (guess == theWord)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.WriteLine("You did it!");
-                            i = 999;
-                        }
-
-                    }
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("The Word Was: " + theWord);
-                }
 
-                //Wait Before Closing
-                Console.ReadKey();
+                    string guess = Console.ReadLine();
+                    if (guess.Length != 5)
+                    {
+                        Console.WriteLine("try agian");
+                        i--;
+                    }
+                    char a = theWord[0];
+                    char b = theWord[1];
+                    char c = theWord[2];
+                    char d = theWord[3];
+                    char e = theWord[4];
+
+                    char aa = guess[0];
+                    char bb = guess[1];
+                    char cc = guess[2];
+                    char dd = guess[3];
+                    char ee = guess[4];
+
+                    //First Letter Guess
+                    if (a == aa)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(aa);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(aa);
+                    }
+
+                    //Second Letter
+                    if (b == bb)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(bb);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(bb);
+                    }
+
+                    //Third Letter
+                    if (c == cc)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(cc);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(cc);
+                    }
+
+                    //Fourth Letter
+                    if (d == dd)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(dd);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(dd);
+                    }
+
+                    //Fifth Letter
+                    if (e == ee)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine(ee);
+                        Console.WriteLine("");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(ee);
+                        Console.WriteLine("");
+                    }
+
+
+                    //Win
+                    if (guess == theWord)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine("You did it!");
+                        i = 999;
+                    }
+
+                }
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("The Word Was: " + theWord);
             }
 
-            //Old
-            else if (answer == "Old")
+            //No
+            else if (difficulty <= 2 )
             {
-                Console.WriteLine("Do You Want Asian Mode?");
-                answer = Console.ReadLine();
+                string theWord = Words[random];
+                Console.WriteLine("Type your first guess (lowercase only)");
+                
 
-                //Yes
-                if (answer == "Yes")
+                for (int i = 0; i < 9; i++)
                 {
-                    for (int i = 0; i < 1; i++)
+                    Console.ForegroundColor = ConsoleColor.White;
+                    string guess = Console.ReadLine();
+                    if(guess.Length != 5)
                     {
-                        random = numberGen.Next(0, 158);
+                        Console.WriteLine("try agian");
+                        i--;
                     }
-                    string theWord = (Words[random]);
-                    Console.WriteLine("Type your first guess (lowercase only)");
-
-                    //Guessing
-
-                    for (int i = 0; i < 7; i++)
+                    else
                     {
-                        Console.ForegroundColor = ConsoleColor.White;
 
-                        string guess = Convert.ToString(Console.ReadLine());
+                        Console.ForegroundColor = GetLetterColor(theWord[0], guess[0], theWord);
+                        Console.WriteLine(guess[0]);
 
-                        char a = theWord[0];
-                        char b = theWord[1];
-                        char c = theWord[2];
-                        char d = theWord[3];
-                        char e = theWord[4];
+                        Console.ForegroundColor = GetLetterColor(theWord[1], guess[1], theWord);
+                        Console.WriteLine(guess[1]);
 
-                        char aa = guess[0];
-                        char bb = guess[1];
-                        char cc = guess[2];
-                        char dd = guess[3];
-                        char ee = guess[4];
+                        Console.ForegroundColor = GetLetterColor(theWord[2], guess[2], theWord);
+                        Console.WriteLine(guess[2]);
 
-                        //First Letter Guess
-                        if (a == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The First Letter Matches!");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The First Letter Does Not Match");
-                        }
+                        Console.ForegroundColor = GetLetterColor(theWord[3], guess[3], theWord);
+                        Console.WriteLine(guess[3]);
 
-                        //Second Letter
-                        if (b == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The Second Letter Matches!");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The Second Letter Does Not Match");
-                        }
+                        Console.ForegroundColor = GetLetterColor(theWord[4], guess[4], theWord);
+                        Console.WriteLine(guess[4]);
 
-                        //Third Letter
-                        if (c == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The Third Letter Matches!");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The Third Letter Does Not Match");
-                        }
-
-                        //Fourth Letter
-                        if (d == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The Fourth Letter Matches!");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The Fourth Letter Does Not Match");
-                        }
-
-                        //Fifth Letter
-                        if (e == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The Fifth Letter Matches!");
-                            Console.WriteLine("");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The Fifth Letter Does Not Match");
-                            Console.WriteLine("");
-                        }
-
-
-                        //Win
                         if (guess == theWord)
                         {
                             Console.ForegroundColor = ConsoleColor.Blue;
                             Console.WriteLine("You did it!");
-                            i = 999;
+                            break;
                         }
-
                     }
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("The Word Was: " + theWord);
                 }
 
-                //No
-                else if (answer == "No")
-                {
-                    for (int i = 0; i < 1; i++)
-                    {
-                        random = numberGen.Next(0, 158);
-                    }
-                    string theWord = (Words[random]);
-                    Console.WriteLine("Type your first guess (lowercase only)");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("The Word Was: " + theWord);
 
-                    //Guessing
-
-                    for (int i = 0; i < 9; i++)
-                    {
-                        Console.ForegroundColor = ConsoleColor.White;
-
-                        string guess = Convert.ToString(Console.ReadLine());
-
-                        char a = theWord[0];
-                        char b = theWord[1];
-                        char c = theWord[2];
-                        char d = theWord[3];
-                        char e = theWord[4];
-
-                        char aa = guess[0];
-                        char bb = guess[1];
-                        char cc = guess[2];
-                        char dd = guess[3];
-                        char ee = guess[4];
-
-                        //First Letter
-                        if (a == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The First Letter Matches!");
-                        }
-                        else if (b == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The First Letter Is In The Wrong Spot!");
-                        }
-                        else if (c == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The First Letter Is In The Wrong Spot!");
-                        }
-                        else if (d == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The First Letter Is In The Wrong Spot!");
-                        }
-                        else if (e == aa)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The First Letter Is In The Wrong Spot!");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The First Letter Does Not Match");
-                        }
-
-                        //Second Letter
-                        if (b == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The Second Letter Matches!");
-                        }
-                        else if (a == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Second Letter Is In The Wrong Spot!");
-                        }
-                        else if (c == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Second Letter Is In The Wrong Spot!");
-                        }
-                        else if (d == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Second Letter Is In The Wrong Spot!");
-                        }
-                        else if (e == bb)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Second Letter Is In The Wrong Spot!");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The Second Letter Does Not Match");
-                        }
-
-                        //Third Letter
-                        if (c == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The Third Letter Matches!");
-                        }
-                        else if (a == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Third Letter Is In The Wrong Spot!");
-                        }
-                        else if (b == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Third Letter Is In The Wrong Spot!");
-                        }
-                        else if (d == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Third Letter Is In The Wrong Spot!");
-                        }
-                        else if (e == cc)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Third Letter Is In The Wrong Spot!");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The Third Letter Does Not Match");
-                        }
-
-                        //Fourth Letter
-                        if (d == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The Fourth Letter Matches!");
-                        }
-                        else if (a == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Fourth Letter Is In The Wrong Spot!");
-                        }
-                        else if (b == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Fourth Letter Is In The Wrong Spot!");
-                        }
-                        else if (c == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Fourth Letter Is In The Wrong Spot!");
-                        }
-                        else if (e == dd)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Fourth Letter Is In The Wrong Spot!");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The Fourth Letter Does Not Match");
-                        }
-
-                        //Fifth Letter
-                        if (e == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("The Fifth Letter Matches!");
-                            Console.WriteLine("");
-                        }
-                        else if (a == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Fifth Letter Is In The Wrong Spot!");
-                            Console.WriteLine("");
-                        }
-                        else if (b == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Fifth Letter Is In The Wrong Spot!");
-                            Console.WriteLine("");
-                        }
-                        else if (c == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Fifth Letter Is In The Wrong Spot!");
-                            Console.WriteLine("");
-                        }
-                        else if (d == ee)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.WriteLine("The Fifth Letter Is In The Wrong Spot!");
-                            Console.WriteLine("");
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("The Fifth Letter Does Not Match");
-                            Console.WriteLine("");
-                        }
-
-                        //Win
-                        if (guess == theWord)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.WriteLine("You did it!");
-                            i = 999;
-                        }
-
-                    }
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine("The Word Was: " + theWord);
-                }
-
-                //Wait Before Closing
-                Console.ReadKey();
+                
             }
 
+            //Wait Before Closing
+            Console.ReadKey();
+        }
+        // Function to get letter color based on comparison
+        private ConsoleColor GetLetterColor(char wordChar, char guessChar, string theWord)
+        {
+            if (wordChar == guessChar)
+            {
+                return ConsoleColor.Green;
+            }
+            else if (theWord.Contains(guessChar.ToString()))
+            {
+                return ConsoleColor.Yellow;
+            }
+            else
+            {
+                return ConsoleColor.Red;
+            }
         }
     }
 }

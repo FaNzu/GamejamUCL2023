@@ -96,8 +96,8 @@ namespace GambleOrDie.Games
             {
                 for (int j = 0; j < height; j++)
                 {
-                    grid[i, j] = (char)' ';
-                    //grid[i, j] = (char)('A' + random.Next(26)); //fyld grid ud med bogstaver
+                    //grid[i, j] = (char)' ';
+                    grid[i, j] = (char)('A' + random.Next(26)); //fyld grid ud med bogstaver
                 }
             }
 
@@ -142,7 +142,7 @@ namespace GambleOrDie.Games
         private bool isValidInput()
         {
             TimeOnly startTime = TimeOnly.FromDateTime(DateTime.Now);
-            TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, 20)); //60 is time in total for puzzle
+            TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, 100)); //60 is time in total for puzzle
             int lives = 3; //adjust with difficulty
             List<string> correctlyGuessedWords = new List<string>();
             //list of words the player has guessed correct

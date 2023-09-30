@@ -53,6 +53,7 @@ namespace GambleOrDie.Games
             //list of words the player has guessed correct
             List<string> correctlyGuessedWords = new List<string>();
 
+            //if time left and isnt dead and isnt 
             while (TimeOnly.FromDateTime(DateTime.Now) < endTime && lives > 0 && correctlyGuessedWords.Count()/ correctWords.Count() != 1) // if the specified amount of time hasn't passed yet
             {
                 Console.SetCursorPosition(0, 20);
