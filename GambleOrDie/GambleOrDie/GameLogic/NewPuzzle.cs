@@ -199,7 +199,7 @@ namespace GambleOrDie.GameLogic
 				{
 					//START NEW GAME AND BET COINS
 					case 0:
-						WordPuzzle puzzle = new WordPuzzle();
+						Wordle puzzle = new Wordle();
 
 						Console.Clear();
 						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
@@ -214,7 +214,7 @@ namespace GambleOrDie.GameLogic
 						Console.WriteLine("Press ENTER to start the game");
 						Console.ReadLine();
 						Console.Clear();
-						if (puzzle.board(difficulty))
+						if (puzzle.board(1))
 						{
 							VictoryScenario();
 						}
@@ -247,7 +247,7 @@ namespace GambleOrDie.GameLogic
 			coinflipEvent.InvokeEvent();
 			Console.Clear();
 
-			if (_player.Coins != 0)
+			if (_player.Coins <= 0)
 			{
 				DeathScreen deathScreen = new DeathScreen(_player);
 			}

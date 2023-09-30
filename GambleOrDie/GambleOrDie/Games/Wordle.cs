@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,9 +12,11 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace GambleOrDie.Games
 {
-    internal class Wordle
+    public class Wordle
     {
-        public void board(int? difficultyGiven)
+        bool victory = false;
+
+        public bool board(int? difficultyGiven)
         {
 
             List<string> Words = new List<string> {
@@ -36,15 +39,13 @@ namespace GambleOrDie.Games
 
             //Random Word Picker
             Random numberGen = new Random();
-
             int random = 0;
-
-            //Choices
             Console.WriteLine("Start the game");
 
-            //Yes
-            if (difficulty == 3)
+            for (int k = 0; k < difficulty; k++)
             {
+                Console.WriteLine($"word number {difficulty}");
+
                 for (int i = 0; i < 1; i++)
                 {
                     random = numberGen.Next(0, 163);
@@ -54,7 +55,7 @@ namespace GambleOrDie.Games
 
                 //Guessing
 
-                for (int i = 0; i < 7; i++)
+                for (int i = 0; i < 4; i++) // 4 tries per word
                 {
                     Console.ForegroundColor = ConsoleColor.White;
 
@@ -63,155 +64,52 @@ namespace GambleOrDie.Games
                     {
                         Console.WriteLine("try agian");
                         i--;
-                    }
-                    char a = theWord[0];
-                    char b = theWord[1];
-                    char c = theWord[2];
-                    char d = theWord[3];
-                    char e = theWord[4];
 
-                    char aa = guess[0];
-                    char bb = guess[1];
-                    char cc = guess[2];
-                    char dd = guess[3];
-                    char ee = guess[4];
+                    }
+                    Console.ForegroundColor = GetLetterColor(theWord[0], guess[0], theWord, difficulty);
+                    Console.WriteLine(guess[0]);
 
-                    //First Letter Guess
-                    if (a == aa)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine(aa);
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(aa);
-                    }
+                    Console.ForegroundColor = GetLetterColor(theWord[1], guess[1], theWord, difficulty);
+                    Console.WriteLine(guess[1]);
 
-                    //Second Letter
-                    if (b == bb)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine(bb);
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(bb);
-                    }
+                    Console.ForegroundColor = GetLetterColor(theWord[2], guess[2], theWord, difficulty);
+                    Console.WriteLine(guess[2]);
 
-                    //Third Letter
-                    if (c == cc)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine(cc);
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(cc);
-                    }
+                    Console.ForegroundColor = GetLetterColor(theWord[3], guess[3], theWord, difficulty);
+                    Console.WriteLine(guess[3]);
 
-                    //Fourth Letter
-                    if (d == dd)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine(dd);
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(dd);
-                    }
-
-                    //Fifth Letter
-                    if (e == ee)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine(ee);
-                        Console.WriteLine("");
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine(ee);
-                        Console.WriteLine("");
-                    }
-
+                    Console.ForegroundColor = GetLetterColor(theWord[4], guess[4], theWord, difficulty);
+                    Console.WriteLine(guess[4]);
 
                     //Win
                     if (guess == theWord)
                     {
                         Console.ForegroundColor = ConsoleColor.Blue;
                         Console.WriteLine("You did it!");
-                        i = 999;
-                    }
-
-                }
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("The Word Was: " + theWord);
-            }
-
-            //No
-            else if (difficulty <= 2 )
-            {
-                string theWord = Words[random];
-                Console.WriteLine("Type your first guess (lowercase only)");
-                
-
-                for (int i = 0; i < 9; i++)
-                {
-                    Console.ForegroundColor = ConsoleColor.White;
-                    string guess = Console.ReadLine();
-                    if(guess.Length != 5)
-                    {
-                        Console.WriteLine("try agian");
-                        i--;
+                        break;
                     }
                     else
                     {
-
-                        Console.ForegroundColor = GetLetterColor(theWord[0], guess[0], theWord);
-                        Console.WriteLine(guess[0]);
-
-                        Console.ForegroundColor = GetLetterColor(theWord[1], guess[1], theWord);
-                        Console.WriteLine(guess[1]);
-
-                        Console.ForegroundColor = GetLetterColor(theWord[2], guess[2], theWord);
-                        Console.WriteLine(guess[2]);
-
-                        Console.ForegroundColor = GetLetterColor(theWord[3], guess[3], theWord);
-                        Console.WriteLine(guess[3]);
-
-                        Console.ForegroundColor = GetLetterColor(theWord[4], guess[4], theWord);
-                        Console.WriteLine(guess[4]);
-
-                        if (guess == theWord)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.WriteLine("You did it!");
-                            break;
-                        }
+                        Console.WriteLine($"you've guessed wrong you have {5-i} tries left");
                     }
                 }
-
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("The Word Was: " + theWord);
-
-                
             }
-
+            Console.ReadLine();
             //Wait Before Closing
-            Console.ReadKey();
+            return victory;
         }
+
+
         // Function to get letter color based on comparison
-        private ConsoleColor GetLetterColor(char wordChar, char guessChar, string theWord)
+        private ConsoleColor GetLetterColor(char wordChar, char guessChar, string theWord, int difficulty)
         {
             if (wordChar == guessChar)
             {
                 return ConsoleColor.Green;
             }
-            else if (theWord.Contains(guessChar.ToString()))
+            else if (theWord.Contains(guessChar.ToString()) && difficulty <= 3)
             {
                 return ConsoleColor.Yellow;
             }
