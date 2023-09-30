@@ -64,7 +64,6 @@ namespace GambleOrDie.Games
                     {
                         Console.WriteLine("try agian");
                         i--;
-
                     }
                     Console.ForegroundColor = GetLetterColor(theWord[0], guess[0], theWord, difficulty);
                     Console.WriteLine(guess[0]);
