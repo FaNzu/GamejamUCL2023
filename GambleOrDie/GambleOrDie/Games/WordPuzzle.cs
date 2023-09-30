@@ -21,9 +21,9 @@ namespace GambleOrDie.Games
                 "COMPUTER", "PHONE", "TABLE", "CHAIR", "BOOK"
             };
         private List<string> selectedWords = new List<string>();
-        private static System.Timers.Timer aTimer;
         private static bool _timerActive = true;
         DateTime startTime;
+        int difficulty = 1; // lav logic der styre sværhedsgrads
 
 
         private static char[,] PlaceWord(string word, char[,] grid, Random random, int width, int height, int difficulty)
@@ -84,14 +84,14 @@ namespace GambleOrDie.Games
         }
 
 
-        public void board()
+        public void board(int? difficultyGiven)
         {
+            difficulty = difficultyGiven!=null ? difficultyGiven.Value : 1;
             int width = 10;
             int height = 10;
             char[,] grid = new char[width, height];
             Random random = new Random();
 
-            int difficulty = 1; // lav logic der styre sværhedsgrads
 
             //fills grid with random letters
             for (int i = 0; i < width; i++)
@@ -165,12 +165,12 @@ namespace GambleOrDie.Games
                 {
                     _timerActive = false;
                 }
-                Console.Error.WriteLine($"you have {60-timerValue.TotalSeconds} left");
+                Console.Error.WriteLine($"you have {60 - timerValue.TotalSeconds} left");
             } while (_timerActive);
             Console.WriteLine("\ntime has run out\n");
             Console.WriteLine($"you correctly guessed {correctlyGuessedWords.Count()}/{selectedWords.Count()}");
 
-            return ((correctlyGuessedWords.Count()/selectedWords.Count())==1 ? true : false); //if player guessed all words return true
+            return ((correctlyGuessedWords.Count() / selectedWords.Count()) == 1 ? true : false); //if player guessed all words return true
         }
     }
 }
