@@ -1,4 +1,5 @@
-﻿using GambleOrDie.Games;
+﻿using GambleOrDie.Events;
+using GambleOrDie.Games;
 using GambleOrDie.Model;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ namespace GambleOrDie.GameLogic
 	public class NewPuzzle
 	{
 		private Player _player;
-		private WordPuzzle puzzle;
 		private int difficulty;
 		private int multiplier;
 		private int stake;
@@ -35,9 +35,9 @@ namespace GambleOrDie.GameLogic
 				difficulty = 3;
 				multiplier = 4;
 			}
-			puzzle = new WordPuzzle();
 			StartGamePuzzle();
 		}
+
 		public int BetCoins()
 		{
 			bool betNotMacthed = true;
@@ -52,6 +52,7 @@ namespace GambleOrDie.GameLogic
 					if (input >= 10 && input <= 25)
 					{
 						result = input;
+						_player.Coins -= input;
 						betNotMacthed = false;
 					}
 					else
@@ -66,6 +67,7 @@ namespace GambleOrDie.GameLogic
 					if (input <= 10 && input >= 50)
 					{
 						result = input;
+						_player.Coins -= input;
 						betNotMacthed = false;
 					}
 					else
@@ -80,6 +82,7 @@ namespace GambleOrDie.GameLogic
 					if (input <= 10 && input >= 75)
 					{
 						result = input;
+						_player.Coins -= input;
 						betNotMacthed = false;
 					}
 					else
@@ -87,7 +90,7 @@ namespace GambleOrDie.GameLogic
 						Console.WriteLine("Bet needs to be alteast 10 coins and not higher then 75 coins.");
 					}
 				}
-				
+
 			}
 			return result;
 		}
@@ -131,13 +134,51 @@ namespace GambleOrDie.GameLogic
 				isSelected = false;
 				switch (option)
 				{
+					//START NEW GAME AND BET COINS
 					case 0:
-						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
-						Console.WriteLine($"Difficulty set to: {difficulty}");
 						WordPuzzle puzzle = new WordPuzzle();
-						stake = BetCoins();
-						puzzle.board();
+						bool betNotConfirmed = true;
+						while (betNotConfirmed)
+						{
+							Console.Clear();
+							Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
+							Console.WriteLine($"Difficulty set to: {difficulty}");
+							stake = BetCoins();
+							Console.Clear();
+							Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
+							Console.WriteLine($"Difficulty set to: {difficulty}");
+							Console.WriteLine($"Confirm bet current bet? {stake} (y/n)");
+							while (betNotConfirmed)
+							{
+								string input = Console.ReadLine();
+								if (input == "y" || input == "yes")
+								{
+									betNotConfirmed = false;
+								}
+								else if (input == "n"|| input == "no")
+								{
+									Console.Clear();
+									Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
+									Console.WriteLine($"Difficulty set to: {difficulty}");
+									stake = BetCoins();
+								}
+								else
+								{
+									Console.WriteLine("Please enter yes or no");
+								}
+							}
+						}
+						Console.Clear();
+						if (puzzle.board(difficulty))
+						{
+							VictoryScenario();
+						}
+						else
+						{
+							DefeatScenario();
+						}
 						break;
+					//EXIT BACK TO MAIN MENU
 					case 1:
 						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
 						Console.WriteLine("Returning To Main Menu");
@@ -146,8 +187,52 @@ namespace GambleOrDie.GameLogic
 						break;
 				}
 				Console.ReadKey();
-			
 			}
 		}
+
+		public void VictoryScenario()
+		{
+			Console.Clear();
+
+			//20% chance for coinflip event
+			CoinflipEvent coinflipEvent = new CoinflipEvent(_player);
+			coinflipEvent.InvokeEvent();
+			Console.Clear();
+
+			Console.WriteLine(" __      ___      _                   _ \r\n \\ \\    / (_)    | |                 | |\r\n  \\ \\  / / _  ___| |_ ___  _ __ _   _| |\r\n   \\ \\/ / | |/ __| __/ _ \\| '__| | | | |\r\n    \\  /  | | (__| || (_) | |  | |_| |_|\r\n     \\/   |_|\\___|\\__\\___/|_|   \\__, (_)\r\n                                 __/ |  \r\n                                |___/   ");
+			int wonCoins = stake * multiplier;
+			Console.WriteLine($"You won {wonCoins} coins!");
+
+			_player.Coins += wonCoins;
+			Console.WriteLine($"New amount of coins {_player.Coins}");
+
+			_player.Score += 50;
+			Console.WriteLine($"New score {_player.Score}");
+
+			Console.SetCursorPosition(0, 20);
+			Console.WriteLine("(ENTER to continue)");
+
+			Console.ReadKey();
+		}
+
+		public void DefeatScenario()
+		{
+			Console.Clear();
+			//20% chance for coinflip event
+			CoinflipEvent coinflipEvent = new CoinflipEvent(_player);
+			coinflipEvent.InvokeEvent();
+			Console.Clear();
+			Console.WriteLine("  _____        __           _           \r\n |  __ \\      / _|         | |          \r\n | |  | | ___| |_ ___  __ _| |_         \r\n | |  | |/ _ \\  _/ _ \\/ _` | __|        \r\n | |__| |  __/ ||  __/ (_| | |_ _ _ _ _ \r\n |_____/ \\___|_| \\___|\\__,_|\\__(_|_|_|_)\r\n                                        \r\n                                        ");
+
+			Console.WriteLine($"You lost you're bet of {stake} coins...");
+
+			_player.Strikes -= 1;
+			Console.WriteLine($"You lost a strike and you {_player.Strikes} strikes left... ");
+
+			Console.SetCursorPosition(0, 20);
+			Console.WriteLine("(ENTER to continue)");
+			Console.ReadKey();
+		}
+
 	}
 }

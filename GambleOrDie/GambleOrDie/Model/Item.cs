@@ -15,7 +15,7 @@ namespace GambleOrDie.Model
 		
 		public Item() 
 		{
-			Price = 5;
+			Price = 25;
 			Random random= new Random();
 			int randomResult = random.Next(0,3);
 

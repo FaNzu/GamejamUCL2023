@@ -84,7 +84,7 @@ namespace GambleOrDie.Games
         }
 
 
-        public void board(int? difficultyGiven)
+        public bool board(int? difficultyGiven)
         {
             difficulty = difficultyGiven!=null ? difficultyGiven.Value : 1;
             int width = 10;
@@ -138,6 +138,7 @@ namespace GambleOrDie.Games
             bool victory = isValidInput();
             Console.WriteLine(victory.ToString());
             Console.ReadLine();
+            return victory;
         }
 
         private bool isValidInput()
