@@ -35,7 +35,6 @@ namespace GambleOrDie.GameLogic
 				difficulty = 3;
 				multiplier = 4;
 			}
-			StartGamePuzzle();
 		}
 
 		public int BetCoins()
@@ -248,6 +247,11 @@ namespace GambleOrDie.GameLogic
 			coinflipEvent.InvokeEvent();
 			Console.Clear();
 
+			if (_player.Coins != 0)
+			{
+				DeathScreen deathScreen = new DeathScreen(_player);
+			}
+
 			Console.WriteLine(" __      ___      _                   _ \r\n \\ \\    / (_)    | |                 | |\r\n  \\ \\  / / _  ___| |_ ___  _ __ _   _| |\r\n   \\ \\/ / | |/ __| __/ _ \\| '__| | | | |\r\n    \\  /  | | (__| || (_) | |  | |_| |_|\r\n     \\/   |_|\\___|\\__\\___/|_|   \\__, (_)\r\n                                 __/ |  \r\n                                |___/   ");
 			Console.WriteLine($"You won {wonCoins} coins!");
 
@@ -266,11 +270,23 @@ namespace GambleOrDie.GameLogic
 		{
 			Console.Clear();
 			//20% chance for coinflip event
-			if (_player.Coins != 0)
+			if (_player.Coins == 0)
 			{
-				CoinflipEvent coinflipEvent = new CoinflipEvent(_player);
-				coinflipEvent.InvokeEvent();
+				DeathScreen deathScreen = new DeathScreen(_player);
 			}
+			else if (_player.Strikes == 0)
+			{
+				DeathScreen deathScreen = new DeathScreen(_player);
+			}
+
+			CoinflipEvent coinflipEvent = new CoinflipEvent(_player);
+			coinflipEvent.InvokeEvent();
+
+			if (_player.Coins == 0)
+			{
+				DeathScreen deathScreen = new DeathScreen(_player);
+			}
+
 			Console.Clear();
 			Console.WriteLine("  _____        __           _           \r\n |  __ \\      / _|         | |          \r\n | |  | | ___| |_ ___  __ _| |_         \r\n | |  | |/ _ \\  _/ _ \\/ _` | __|        \r\n | |__| |  __/ ||  __/ (_| | |_ _ _ _ _ \r\n |_____/ \\___|_| \\___|\\__,_|\\__(_|_|_|_)\r\n                                        \r\n                                        ");
 
@@ -283,6 +299,5 @@ namespace GambleOrDie.GameLogic
 			Console.WriteLine("(ENTER to continue)");
 			Console.ReadKey();
 		}
-
 	}
 }
