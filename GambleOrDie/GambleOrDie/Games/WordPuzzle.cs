@@ -23,8 +23,6 @@ namespace GambleOrDie.Games
                 "COMPUTER", "PHONE", "TABLE", "CHAIR", "BOOK"
             };
         private List<string> selectedWords = new List<string>();
-        private static bool _timerActive = true;
-        DateTime startTime;
         int difficulty = 1; // lav logic der styre sværhedsgrads
 
 
@@ -148,7 +146,7 @@ namespace GambleOrDie.Games
             int lives = 3; //adjust with difficulty
             List<string> correctlyGuessedWords = new List<string>();
             //list of words the player has guessed correct
-            while (TimeOnly.FromDateTime(DateTime.Now) < endTime && lives >0) // if the specified amount of time hasn't passed yet
+            while (TimeOnly.FromDateTime(DateTime.Now) < endTime && lives >0 && correctlyGuessedWords.Count()/selectedWords.Count()!=1) // if the specified amount of time hasn't passed yet
             {
                 Console.SetCursorPosition(0, 12 + height);
                 Console.WriteLine(new string(' ', Console.WindowWidth - 10)); // Clears the line from column 10 to the end
@@ -175,6 +173,10 @@ namespace GambleOrDie.Games
             }
             if (lives <= 0)
                 Console.WriteLine("\nYou ran out of lives\n");
+            else if (correctlyGuessedWords.Count() / selectedWords.Count() == 1)
+            {
+                Console.WriteLine("You guessed them all");
+            }
             else
                 Console.WriteLine("\ntime has run out\n");
             Console.WriteLine($"you correctly guessed {correctlyGuessedWords.Count()}/{selectedWords.Count()}");

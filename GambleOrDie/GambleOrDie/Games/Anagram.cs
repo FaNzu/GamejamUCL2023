@@ -27,7 +27,7 @@ namespace GambleOrDie.Games
             for (int i = 0; i < 3; i++)
             {
                 string selectedWord = allwords[random.Next(0,allwords.Length)];
-                if(!correctWords.Contains(selectedWord))
+                if(!correctWords.Contains(selectedWord.ToLower()))
                 {
                     Console.WriteLine(selectedWord);
                     string shuffledWord = Shuffle(selectedWord);
@@ -43,8 +43,6 @@ namespace GambleOrDie.Games
 
             return victory;
         }
-
-        
 
         private bool isValidGuess(int difficulty)
         {
