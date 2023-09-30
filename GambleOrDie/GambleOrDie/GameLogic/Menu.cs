@@ -1,4 +1,5 @@
 ﻿using GambleOrDie.Model;
+using System.Security.Cryptography;
 
 namespace GambleOrDie.GameLogic
 {
@@ -58,14 +59,20 @@ namespace GambleOrDie.GameLogic
 						shop.StartShop();
 						break;
 					case 1:
-						Console.WriteLine("Here is your inventory");
+						Console.Clear();
+						Console.WriteLine("  _____                      _                   \r\n |_   _|                    | |                  \r\n   | |  _ ____   _____ _ __ | |_ ___  _ __ _   _ \r\n   | | | '_ \\ \\ / / _ \\ '_ \\| __/ _ \\| '__| | | |\r\n  _| |_| | | \\ V /  __/ | | | || (_) | |  | |_| |\r\n |_____|_| |_|\\_/ \\___|_| |_|\\__\\___/|_|   \\__, |\r\n                                            __/ |\r\n                                           |___/ ");
+						Console.WriteLine("Here is your inventory:");
 						foreach (Item item in _player.Items)
 						{
 							Console.WriteLine($"{item.Titel} - {item.Description}");
 						}
+						Console.SetCursorPosition(0, _player.Items.Count() + 10);
+						Console.WriteLine("Press ENTER to return to main menu");
+						Console.ReadKey();
 						break;
 					case 2:
 						NewPuzzle puzzle = new NewPuzzle(_player);
+						puzzle.StartGamePuzzle();
 						break;
 					case 3:
 						Console.WriteLine("   _____                 _     _         ____         _____  _      _ \r\n  / ____|               | |   | |       / __ \\       |  __ \\(_)    | |\r\n | |  __  __ _ _ __ ___ | |__ | | ___  | |  | |_ __  | |  | |_  ___| |\r\n | | |_ |/ _` | '_ ` _ \\| '_ \\| |/ _ \\ | |  | | '__| | |  | | |/ _ \\ |\r\n | |__| | (_| | | | | | | |_) | |  __/ | |__| | |    | |__| | |  __/_|\r\n  \\_____|\\__,_|_| |_| |_|_.__/|_|\\___|  \\____/|_|    |_____/|_|\\___(_)\r\n                                                                      \r\n                                                                      ");
