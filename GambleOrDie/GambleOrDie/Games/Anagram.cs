@@ -3,11 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GambleOrDie.Model;
 
 namespace GambleOrDie.Games
 {
     public class Anagram : PuzzleGames
     {
+
+        public Anagram(Item givenItem)
+        {
+            itemInUse = givenItem;
+        }
+        public Anagram() { }
+
+        #region variables
+        private Item? itemInUse = new Item();
         private string[] allwords = {
                 "Elephant","Journey","Symphony","Rainbow",
                 "Library","Whistle","Weather","Mountain",
@@ -17,7 +27,7 @@ namespace GambleOrDie.Games
             };
         int difficulty = 1; // lav logic der styre sværhedsgrads
         private List<string> correctWords = new List<string>();
-
+        #endregion
 
 
         public bool board(int? difficultyGiven)
@@ -46,10 +56,25 @@ namespace GambleOrDie.Games
 
         private bool isValidGuess(int difficulty)
         {
-            TimeOnly startTime = TimeOnly.FromDateTime(DateTime.Now);
-            TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, 20)); //60 is time in total for puzzle
-            int lives = 3; //adjust with difficulty
+            int timeToPlay = 120;
+            switch (itemInUse.Effect)
+            {
+                case Effects.TimeRemover:
+                    timeToPlay -= 60;
+                    break;
+                case Effects.TimeAdder:
+                    timeToPlay += 60;
+                    break;
+            }
 
+            int lives = 3; //adjust with difficulty
+            if (difficulty <=2)
+            {
+                lives = 5;
+            }
+
+            TimeOnly startTime = TimeOnly.FromDateTime(DateTime.Now);
+            TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, timeToPlay)); //60 is time in total for puzzle
             //list of words the player has guessed correct
             List<string> correctlyGuessedWords = new List<string>();
 
@@ -100,6 +125,7 @@ namespace GambleOrDie.Games
         
         
         static string Shuffle(string list)
+            //shuffling the given word and returns it
         {
             int index;
             Random R = new Random();
