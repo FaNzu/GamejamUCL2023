@@ -16,6 +16,7 @@ namespace GambleOrDie.GameLogic
 		private int difficulty;
 		private int multiplier;
 		private int stake;
+		private Item chosenItem;
 
 		public NewPuzzle(Player player)
 		{
@@ -42,7 +43,6 @@ namespace GambleOrDie.GameLogic
 		{
 			Console.OutputEncoding = Encoding.UTF8;
 
-			Item chosenItem;
 			int option = 0;
 			string decorator = "➡️ \u001b[32m";
 			ConsoleKeyInfo key;
@@ -110,7 +110,6 @@ namespace GambleOrDie.GameLogic
 						Console.ReadLine();
 						Console.Clear();
 
-						//should make a randomizer, or make a order of games to appear
 						if (StartRandomPuzzleGame(chosenItem))
 						{
 							VictoryScenario();
@@ -119,7 +118,6 @@ namespace GambleOrDie.GameLogic
 						{
 							DefeatScenario();
 						}
-
 						break;
 					//EXIT BACK TO MAIN MENU
 					case 1:
@@ -254,7 +252,7 @@ namespace GambleOrDie.GameLogic
 			return result;
 		}
 
-		public bool StartRandomPuzzleGame(Item item)
+		public bool StartRandomPuzzleGame(Item? item)
 		{
 			bool result = false;
 			Random random = new Random();
