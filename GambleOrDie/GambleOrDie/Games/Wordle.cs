@@ -12,7 +12,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace GambleOrDie.Games
 {
-    public class Wordle : PuzzleGames
+    public class Wordle
 	{
         bool victory = false;
 

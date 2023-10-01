@@ -13,7 +13,7 @@ namespace GambleOrDie.Model
 		public string Description { get; set; }
 		public Effects Effect { get; set; }
 		public int Price { get; set; }
-		private static int id = 0;
+		private static int id = 1;
 		private static int GenerateId()
 		{
 			return id++;

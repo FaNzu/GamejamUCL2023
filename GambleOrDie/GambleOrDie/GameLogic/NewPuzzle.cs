@@ -93,16 +93,18 @@ namespace GambleOrDie.GameLogic
 						Console.WriteLine($"Current bet: {stake}");
 						Console.WriteLine($"Current coins: {_player.Coins}");
 
-						int choice = Convert.ToInt32(Console.ReadLine());
+						if (_player.Items == null || _player.Items.Any())
+						{
 
-						if (UseItem() == true)
-						{
-							chosenItem = GetItem(choice);
-							Console.WriteLine($"Chosen item is: {chosenItem.Titel} - {chosenItem.Description}");
-						}
-						else if (UseItem() == false)
-						{
-							Console.WriteLine("No item was chosen");
+							if (UseItem())
+							{
+								chosenItem = GetItem();
+								Console.WriteLine($"Chosen item is: {chosenItem.Titel} - {chosenItem.Description}");
+							}
+							else if (UseItem())
+							{
+								Console.WriteLine("No item was chosen");
+							}
 						}
 						Console.WriteLine("Press ENTER to start the game");
 						Console.ReadLine();
@@ -117,6 +119,7 @@ namespace GambleOrDie.GameLogic
 						{
 							DefeatScenario();
 						}
+
 						break;
 					//EXIT BACK TO MAIN MENU
 					case 1:
@@ -251,44 +254,34 @@ namespace GambleOrDie.GameLogic
 			return result;
 		}
 
-		public PuzzleGames StartRandomPuzzleGame()
+		public bool StartRandomPuzzleGame()
 		{
-			Random random = new Random();
-			PuzzleGames result = new PuzzleGames();
-			switch (random.Next(0, 2))
-			{
-				case 0:
-					Anagram anagram = new Anagram();
-					result = anagram;
-					break;
-				case 1:
-					Wordle wordle = new Wordle();
-					result = wordle;
-					break;
-				case 2:
-					WordPuzzle wordPuzzle = new WordPuzzle();
-					result = wordPuzzle;
-					break;
-			}
+			bool result;
+			//Random random = new Random();
+			//switch (random.Next(0, 2))
+			//{
+			//	case 0:
+			result = WordPuzzle.board(difficulty);
+			//		break;
+			//	case 1:
+			//		break;
+			//	case 2:
+			//		break;
+			//}
 			return result;
 		}
 
-		public Item GetItem(int choice)
+		public Item GetItem()
 		{
+			Console.WriteLine("Chose an item to use");
+
 			foreach (Item item in _player.Items)
 			{
-				if (choice == item.Id)
-				{
-					Console.Clear();
-					Console.WriteLine("Chose item number");
-					foreach (Item item in _player.Items)
-					{
-						Console.WriteLine($"{item.Id} - {item.Titel} - {item.Description}");
-					}
-					return item;
-				}
+				Console.WriteLine($"{item.Id} - {item.Titel} - {item.Description}");
 			}
-			return null;
+			int choice = Convert.ToInt32(Console.ReadLine());
+
+			return _player.Items.Find(x => x.Id == choice);
 		}
 
 		public bool UseItem()
@@ -304,14 +297,14 @@ namespace GambleOrDie.GameLogic
 					useItem = true;
 					whileNotChosen = false;
 				}
+				else
+				{
+					Console.WriteLine("Enter y or n (yes/no)");
+				}
 				if (input == "n")
 				{
 					useItem = false;
 					whileNotChosen = false;
-				}
-				else
-				{
-					Console.WriteLine("Enter y or n (yes/no)");
 				}
 			}
 			return useItem;
@@ -383,3 +376,5 @@ namespace GambleOrDie.GameLogic
 		}
 	}
 }
+
+

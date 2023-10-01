@@ -7,7 +7,7 @@ using GambleOrDie.Model;
 
 namespace GambleOrDie.Games
 {
-    public class Anagram : PuzzleGames
+    public class Anagram 
     {
 
         public Anagram(Item givenItem)

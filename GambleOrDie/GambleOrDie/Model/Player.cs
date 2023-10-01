@@ -19,7 +19,7 @@ namespace GambleOrDie.Model
 			Strikes = 3;
 			Score = 0;
 			Name = name;
-			Coins = 25;
+			Coins = 50;
 		}
 	}
 }
