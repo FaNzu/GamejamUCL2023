@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace GambleOrDie.Games
 {
-	internal class PuzzleGame
+	public class PuzzleGames
 	{
+		public Anagram Anagram { get; set; }
+		public Wordle Wordle { get; set; }
+		public WordPuzzle WordPuzzle { get; set; }
+		public PuzzleGames() 
+		{
+			Anagram = new Anagram();
+			Wordle = new Wordle();
+			WordPuzzle = new WordPuzzle();
+		}
 	}
 }

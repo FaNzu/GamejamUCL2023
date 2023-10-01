@@ -9,7 +9,7 @@ using System.Timers;
 
 namespace GambleOrDie.Games
 {
-    class WordPuzzle : PuzzleGame
+    public class WordPuzzle : PuzzleGames
 	{
         int width = 10;
         int height = 10;
