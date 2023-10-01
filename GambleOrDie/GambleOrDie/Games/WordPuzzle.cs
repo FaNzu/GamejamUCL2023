@@ -87,7 +87,7 @@ namespace GambleOrDie.Games
         }
 
 
-        public static bool board(int? difficultyGiven, Item givenItem)
+        public static bool board(int? difficultyGiven, Item? givenItem)
         {
             
             difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
@@ -143,7 +143,7 @@ namespace GambleOrDie.Games
             return victory;
         }
 
-        private static bool isValidInput(Item givenItem)
+        private static bool isValidInput(Item? givenItem)
         {
             int timeToPlay = 120;
             switch (givenItem.Effect)
