@@ -48,17 +48,20 @@ namespace GambleOrDie.Games
             return victory;
         }
 
-        private static bool isValidGuess(int difficulty, Item givenItem)
+        private static bool isValidGuess(int difficulty, Item? givenItem)
         {
             int timeToPlay = 120;
-            switch (givenItem.Effect)
+            if (givenItem != null)
             {
-                case Effects.TimeRemover:
-                    timeToPlay -= 60;
-                    break;
-                case Effects.TimeAdder:
-                    timeToPlay += 60;
-                    break;
+                switch (givenItem.Effect)
+                {
+                    case Effects.TimeRemover:
+                        timeToPlay -= 60;
+                        break;
+                    case Effects.TimeAdder:
+                        timeToPlay += 60;
+                        break;
+                }
             }
 
             int lives = 3; //adjust with difficulty
