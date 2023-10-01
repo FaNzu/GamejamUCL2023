@@ -1,139 +1,130 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
 
-//from youtube tutorial
+Exception? exception = null;
 
-namespace SnakeConsoleGame
+char[] DirectionChars = { '^', 'v', '<', '>', };
+TimeSpan sleep = TimeSpan.FromMilliseconds(70);
+int width = Console.WindowWidth;
+int height = Console.WindowHeight;
+Random random = new();
+Tile[,] map = new Tile[width, height];
+Direction? direction = null;
+Queue<(int X, int Y)> snake = new();
+(int X, int Y) = (width / 2, height / 2);
+bool closeRequested = false;
+
+try
 {
-    internal class Snake
+    Console.CursorVisible = false;
+    Console.Clear();
+    snake.Enqueue((X, Y));
+    map[X, Y] = Tile.Snake;
+    PositionFood();
+    Console.SetCursorPosition(X, Y);
+    Console.Write('@');
+    while (!direction.HasValue && !closeRequested)
     {
-
-        int Height = 20;
-
-        int Width = 30;
-
-        int[] X = new int[50];
-
-        int[] Y = new int[50];
-
-        int fruitX;
-
-        int fruitY;
-
-        int parts = 3;
-
-        ConsoleKeyInfo keyInfo = new ConsoleKeyInfo();
-
-        char key = 'W';
-
-        Random rnd = new Random();
-
-        Snake()
-        {
-            X[0] = 5;
-            Y[0] = 5;
-            Console.CursorVisible = false;
-            fruitX = rnd.Next(2, (Width - 2));
-            fruitY = rnd.Next(2, (Height - 2));
-        }
-
-        public void WriteBoard()
+        GetDirection();
+    }
+    while (!closeRequested)
+    {
+        if (Console.WindowWidth != width || Console.WindowHeight != height)
         {
             Console.Clear();
-
-            for (int i = 1; i <= (Width + 2); i++)
-            {
-                Console.SetCursorPosition(i, 1);
-                Console.Write("-");
-            }
-
-            for (int i = 1; i <= (Width + 2); i++)
-            {
-                Console.SetCursorPosition(i, (Height + 2));
-                Console.Write("-");
-            }
-
-            for (int i = 1; i <= (Height + 1); i++)
-            {
-                Console.SetCursorPosition(1, i);
-                Console.Write("-");
-            }
-
-            for (int i = 1; i <= (Height + 1); i++)
-            {
-                Console.SetCursorPosition((Width + 2), i);
-                Console.Write("-");
-            }
+            Console.Write("Console was resized. Snake game has ended.");
+            return;
         }
-
-        public void Input()
+        switch (direction)
         {
-            if (Console.KeyAvailable)
-            {
-                keyInfo = Console.ReadKey(true);
-                key = keyInfo.KeyChar;
-            }
+            case Direction.Up: Y--; break;
+            case Direction.Down: Y++; break;
+            case Direction.Left: X--; break;
+            case Direction.Right: X++; break;
         }
-
-        public void WritePoint(int x, int y)
+        if (X < 0 || X >= width || Y < 0 || Y >= height || map[X, Y] is Tile.Snake)
         {
+            Console.Clear();
+            Console.Write("Game Over. Score: " + (snake.Count - 1) + ".");
+            return;
+        }
+        Console.SetCursorPosition(X, Y);
+        Console.Write(DirectionChars[(int)direction!]);
+        snake.Enqueue((X, Y));
+        if (map[X, Y] == Tile.Food)
+        {
+            PositionFood();
+        }
+        else
+        {
+            (int x, int y) = snake.Dequeue();
+            map[x, y] = Tile.Open;
             Console.SetCursorPosition(x, y);
-            Console.Write("w");
+            Console.Write(' ');
         }
-
-        public void Logic()
+        map[X, Y] = Tile.Snake;
+        if (Console.KeyAvailable)
         {
-            if (X[0] == fruitX)
-            {
-                if (Y[0] == fruitY)
-                {
-                    parts++;
-                    fruitX = rnd.Next(2, (Width - 2));
-                    fruitY = rnd.Next(2, (Height - 2));
-                }
-            }
-
-            for (int i = parts; i > 1; i--)
-            {
-                X[i - 1] = X[i - 2];
-                Y[i - 1] = Y[i - 2];
-            }
-
-            switch (key)
-            {
-                case 'w':
-                    Y[0]--;
-                    break;
-                case 's':
-                    Y[0]++;
-                    break;
-                case 'd':
-                    X[0]++;
-                    break;
-                case 'a':
-                    X[0]--;
-                    break;
-            }
-
-            for (int i = 0; i <= (parts - 1); i++)
-            {
-                WritePoint(X[i], Y[i]);
-                WritePoint(fruitX, fruitY);
-            }
-
-            Thread.Sleep(100);
+            GetDirection();
         }
+        System.Threading.Thread.Sleep(sleep);
+    }
+}
+catch (Exception e)
+{
+    exception = e;
+    throw;
+}
+finally
+{
+    Console.CursorVisible = true;
+    Console.Clear();
+    Console.WriteLine(exception?.ToString() ?? "Snake was closed.");
+}
 
-        static void Main(string[] args)
+void GetDirection()
+{
+    switch (Console.ReadKey(true).Key)
+    {
+        case ConsoleKey.UpArrow: direction = Direction.Up; break;
+        case ConsoleKey.DownArrow: direction = Direction.Down; break;
+        case ConsoleKey.LeftArrow: direction = Direction.Left; break;
+        case ConsoleKey.RightArrow: direction = Direction.Right; break;
+        case ConsoleKey.Escape: closeRequested = true; break;
+    }
+}
+
+void PositionFood()
+{
+    List<(int X, int Y)> possibleCoordinates = new();
+    for (int i = 0; i < width; i++)
+    {
+        for (int j = 0; j < height; j++)
         {
-            Snake Snake = new Snake();
-            while (true)
+            if (map[i, j] is Tile.Open)
             {
-                Snake.WriteBoard();
-                Snake.Input();
-                Snake.Logic();
+                possibleCoordinates.Add((i, j));
             }
-            Console.ReadKey();
         }
     }
+    int index = random.Next(possibleCoordinates.Count);
+    (int X, int Y) = possibleCoordinates[index];
+    map[X, Y] = Tile.Food;
+    Console.SetCursorPosition(X, Y);
+    Console.Write('+');
+}
+
+enum Direction
+{
+    Up = 0,
+    Down = 1,
+    Left = 2,
+    Right = 3,
+}
+
+enum Tile
+{
+    Open = 0,
+    Snake,
+    Food,
 }

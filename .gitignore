@@ -131,3 +131,20 @@ $RECYCLE.BIN/
 .DS_Store
 
 _NCrunch*
+*.vsidx
+/.vs/GamejamUCL2023/v17/.wsuo
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/GambleOrDie/.vs/GambleOrDie/DesignTimeBuild
+/Gamejam/.vs/Gamejam/DesignTimeBuild/.dtbcache.v2
+/Gamejam/.vs/Gamejam/FileContentIndex/64b5d811-bab2-46cb-a98a-76023b0251dd.vsidx
+/.vs/GamejamUCL2023/FileContentIndex/ff4b307c-1f1b-45ec-971c-69dba5fe7b4d.vsidx
+/.vs/GamejamUCL2023/v17/.wsuo
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/GambleOrDie/.vs/GambleOrDie/FileContentIndex
+/GambleOrDie/.vs/GambleOrDie/v17
+/GambleOrDie/.vs/ProjectEvaluation
+/Gamejam/.vs/Gamejam/FileContentIndex/c023152d-c31c-464f-ada7-5df7bb119ab2.vsidx
+/Gamejam/.vs/Gamejam/FileContentIndex/64b5d811-bab2-46cb-a98a-76023b0251dd.vsidx
+/Gamejam/.vs/Gamejam/DesignTimeBuild/.dtbcache.v2
