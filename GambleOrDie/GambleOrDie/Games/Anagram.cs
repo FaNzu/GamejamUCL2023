@@ -10,34 +10,28 @@ namespace GambleOrDie.Games
     public class Anagram 
     {
 
-        public Anagram(Item givenItem)
-        {
-            itemInUse = givenItem;
-        }
-        public Anagram() { }
-
         #region variables
-        private Item? itemInUse = new Item();
-        private string[] allwords = {
+        private Item? itemInUse;
+        private static string[] allwords = {
                 "Elephant","Journey","Symphony","Rainbow",
                 "Library","Whistle","Weather","Mountain",
                 "Blossom","Harmony","Telescope","Universe",
                 "Computer","Blossom","Eruption","Adventure",
                 "Firework","Serenity","Wildlife","Discovery"
             };
-        int difficulty = 1; // lav logic der styre sværhedsgrads
-        private List<string> correctWords = new List<string>();
+        static int difficulty = 1; // lav logic der styre sværhedsgrads
+        private static List<string> correctWords = new List<string>();
         #endregion
 
 
-        public bool board(int? difficultyGiven)
+        public static bool board(int? difficultyGiven)
         {
             Random random = new Random();
             difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
             for (int i = 0; i < 3; i++)
             {
-                string selectedWord = allwords[random.Next(0,allwords.Length)];
-                if(!correctWords.Contains(selectedWord.ToLower()))
+                string selectedWord = allwords[random.Next(0, allwords.Length)];
+                if (!correctWords.Contains(selectedWord.ToLower()))
                 {
                     Console.WriteLine(selectedWord);
                     string shuffledWord = Shuffle(selectedWord);
@@ -54,21 +48,21 @@ namespace GambleOrDie.Games
             return victory;
         }
 
-        private bool isValidGuess(int difficulty)
+        private static bool isValidGuess(int difficulty)
         {
             int timeToPlay = 120;
-            switch (itemInUse.Effect)
-            {
-                case Effects.TimeRemover:
-                    timeToPlay -= 60;
-                    break;
-                case Effects.TimeAdder:
-                    timeToPlay += 60;
-                    break;
-            }
+            //switch (itemInUse.Effect)
+            //{
+            //    case Effects.TimeRemover:
+            //        timeToPlay -= 60;
+            //        break;
+            //    case Effects.TimeAdder:
+            //        timeToPlay += 60;
+            //        break;
+            //}
 
             int lives = 3; //adjust with difficulty
-            if (difficulty <=2)
+            if (difficulty <= 2)
             {
                 lives = 5;
             }
@@ -79,7 +73,7 @@ namespace GambleOrDie.Games
             List<string> correctlyGuessedWords = new List<string>();
 
             //if time left and isnt dead and isnt 
-            while (TimeOnly.FromDateTime(DateTime.Now) < endTime && lives > 0 && correctlyGuessedWords.Count()/ correctWords.Count() != 1) // if the specified amount of time hasn't passed yet
+            while (TimeOnly.FromDateTime(DateTime.Now) < endTime && lives > 0 && correctlyGuessedWords.Count() / correctWords.Count() != 1) // if the specified amount of time hasn't passed yet
             {
                 Console.SetCursorPosition(0, 20);
                 Console.WriteLine(new string(' ', Console.WindowWidth)); // Clears the line from column 10 to the end
@@ -121,11 +115,11 @@ namespace GambleOrDie.Games
 
             return ((correctlyGuessedWords.Count() / 3) >= 1 ? true : false); //if player guessed all words return true
         }
-        
-        
-        
+
+
+
         static string Shuffle(string list)
-            //shuffling the given word and returns it
+        //shuffling the given word and returns it
         {
             int index;
             Random R = new Random();
