@@ -5,12 +5,21 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Timers;
+using GambleOrDie.Model;
 
 
 namespace GambleOrDie.Games
 {
     class WordPuzzle
     {
+        public WordPuzzle(Item givenItem)
+        {
+            itemInUse = givenItem;
+        }
+        public WordPuzzle() { }
+
+        #region variables
+        private Item? itemInUse;
         int width = 10;
         int height = 10;
         private static char[,] alrPlacedWords;
@@ -24,7 +33,7 @@ namespace GambleOrDie.Games
             };
         private List<string> selectedWords = new List<string>();
         int difficulty = 1; // lav logic der styre sværhedsgrads
-
+        #endregion
 
         private static char[,] PlaceWord(string word, char[,] grid, Random random, int width, int height, int difficulty)
         {
@@ -86,6 +95,7 @@ namespace GambleOrDie.Games
 
         public bool board(int? difficultyGiven)
         {
+            
             difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
             char[,] grid = new char[width, height];
             Random random = new Random();
@@ -141,8 +151,13 @@ namespace GambleOrDie.Games
 
         private bool isValidInput()
         {
+            int timeToPlay = 120;
+            if (itemInUse.Effect == Effects.TimeRemover)
+                timeToPlay -= 60;
+            else if (itemInUse.Effect == Effects.TimeRemover)
+                timeToPlay += 60;
             TimeOnly startTime = TimeOnly.FromDateTime(DateTime.Now);
-            TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, 100)); //60 is time in total for puzzle
+            TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, timeToPlay)); //60 is time in total for puzzle
             int lives = 3; //adjust with difficulty
             List<string> correctlyGuessedWords = new List<string>();
             //list of words the player has guessed correct

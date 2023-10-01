@@ -216,7 +216,7 @@ namespace GambleOrDie.GameLogic
 						Console.Clear();
 
 						//should make a randomizer, or make a order of games to appear
-						Wordle puzzle = new Wordle();
+						Anagram puzzle = new Anagram();
 						//Anagram puzzle = new Anagram();
 						//WordPuzzle puzzle = new WordPuzzle();
 						if (puzzle.board(1))

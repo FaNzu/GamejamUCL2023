@@ -44,58 +44,61 @@ namespace GambleOrDie.Games
 
             for (int k = 0; k < difficulty; k++)
             {
-                Console.WriteLine($"word number {difficulty}");
+                Console.WriteLine($"word number {k} out of {difficulty}");
 
-                for (int i = 0; i < 1; i++)
-                {
-                    random = numberGen.Next(0, 163);
-                }
+                random = numberGen.Next(0, Words.Count());
+
+                string guess;
                 string theWord = (Words[random]);
                 Console.WriteLine("Type your first guess (lowercase only)");
 
                 //Guessing
-
-                for (int i = 0; i < 4; i++) // 4 tries per word
+                for (int i = 0; i <= 4; i++) // 5 tries per word
                 {
                     Console.ForegroundColor = ConsoleColor.White;
 
-                    string guess = Console.ReadLine();
+                    guess = Console.ReadLine();
                     if (guess.Length != 5)
                     {
                         Console.WriteLine("try agian");
                         i--;
-
                     }
-                    Console.ForegroundColor = GetLetterColor(theWord[0], guess[0], theWord, difficulty);
-                    Console.WriteLine(guess[0]);
+                    else
+                    {
+                        Console.ForegroundColor = GetLetterColor(theWord[0], guess[0], theWord, difficulty);
+                        Console.WriteLine(guess[0]);
 
-                    Console.ForegroundColor = GetLetterColor(theWord[1], guess[1], theWord, difficulty);
-                    Console.WriteLine(guess[1]);
+                        Console.ForegroundColor = GetLetterColor(theWord[1], guess[1], theWord, difficulty);
+                        Console.WriteLine(guess[1]);
 
-                    Console.ForegroundColor = GetLetterColor(theWord[2], guess[2], theWord, difficulty);
-                    Console.WriteLine(guess[2]);
+                        Console.ForegroundColor = GetLetterColor(theWord[2], guess[2], theWord, difficulty);
+                        Console.WriteLine(guess[2]);
 
-                    Console.ForegroundColor = GetLetterColor(theWord[3], guess[3], theWord, difficulty);
-                    Console.WriteLine(guess[3]);
+                        Console.ForegroundColor = GetLetterColor(theWord[3], guess[3], theWord, difficulty);
+                        Console.WriteLine(guess[3]);
 
-                    Console.ForegroundColor = GetLetterColor(theWord[4], guess[4], theWord, difficulty);
-                    Console.WriteLine(guess[4]);
+                        Console.ForegroundColor = GetLetterColor(theWord[4], guess[4], theWord, difficulty);
+                        Console.WriteLine(guess[4]);
+                    }
 
                     //Win
                     if (guess == theWord)
                     {
                         Console.ForegroundColor = ConsoleColor.Blue;
                         Console.WriteLine("You did it!");
+                        victory = true;
                         break;
                     }
+
                     else
                     {
-                        Console.WriteLine($"you've guessed wrong you have {5-i} tries left");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine($"you've guessed wrong you have {5 - i} tries left");
                     }
                 }
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("The Word Was: " + theWord);
-                }
+            }
             Console.ReadLine();
             //Wait Before Closing
             return victory;
