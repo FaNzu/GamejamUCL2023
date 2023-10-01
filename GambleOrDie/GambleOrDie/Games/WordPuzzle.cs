@@ -19,20 +19,20 @@ namespace GambleOrDie.Games
         public WordPuzzle() { }
 
         #region variables
-        private Item? itemInUse;
-        int width = 10;
-        int height = 10;
+        private static Item? itemInUse;
+        private static int width = 10;
+        private static int height = 10;
         private static char[,] alrPlacedWords;
-        private string[] allwords = {
-                "HELLO", "DOOR", "NINE", "EIGHT",
-                "APPLE", "BANANA", "ORANGE", "MANGO", "STRAWBERRY",
-                "CAR", "BUS", "TRAIN", "PLANE", "SHIP",
-                "DOG", "CAT", "ELEPHANT", "LION", "TIGER",
-                "HOUSE", "SCHOOL", "PARK", "HOSPITAL", "LIBRARY",
-                "COMPUTER", "PHONE", "TABLE", "CHAIR", "BOOK"
-            };
-        private List<string> selectedWords = new List<string>();
-        int difficulty = 1; // lav logic der styre sværhedsgrads
+        private static string[] allwords = {
+            "HELLO", "DOOR", "NINE", "EIGHT",
+            "APPLE", "BANANA", "ORANGE", "MANGO", "STRAWBERRY",
+            "CAR", "BUS", "TRAIN", "PLANE", "SHIP",
+            "DOG", "CAT", "ELEPHANT", "LION", "TIGER",
+            "HOUSE", "SCHOOL", "PARK", "HOSPITAL", "LIBRARY",
+            "COMPUTER", "PHONE", "TABLE", "CHAIR", "BOOK"
+        };
+        private static List<string> selectedWords = new List<string>();
+        private static int difficulty = 1;
         #endregion
 
         private static char[,] PlaceWord(string word, char[,] grid, Random random, int width, int height, int difficulty)
@@ -93,7 +93,7 @@ namespace GambleOrDie.Games
         }
 
 
-        public bool board(int? difficultyGiven)
+        public static bool board(int? difficultyGiven)
         {
             
             difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
@@ -149,13 +149,13 @@ namespace GambleOrDie.Games
             return victory;
         }
 
-        private bool isValidInput()
+        private static bool isValidInput()
         {
             int timeToPlay = 120;
-            if (itemInUse.Effect == Effects.TimeRemover)
-                timeToPlay -= 60;
-            else if (itemInUse.Effect == Effects.TimeRemover)
-                timeToPlay += 60;
+            //if (itemInUse.Effect == Effects.TimeRemover)
+            //    timeToPlay -= 60;
+            //else if (itemInUse.Effect == Effects.TimeRemover)
+            //    timeToPlay += 60;
             TimeOnly startTime = TimeOnly.FromDateTime(DateTime.Now);
             TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, timeToPlay)); //60 is time in total for puzzle
             int lives = 3; //adjust with difficulty
@@ -165,7 +165,7 @@ namespace GambleOrDie.Games
             {
                 Console.SetCursorPosition(0, 12 + height);
                 Console.WriteLine(new string(' ', Console.WindowWidth - 10)); // Clears the line from column 10 to the end
-                Console.WriteLine($"you have {lives} lives yet");
+                Console.WriteLine($"you have {lives} lives left");
 
                 Console.SetCursorPosition(10, 12 + height);
                 Console.Write("Type: ");
@@ -184,7 +184,8 @@ namespace GambleOrDie.Games
                     lives--;
                 }
 
-                Console.Error.WriteLine($"you have {endTime - TimeOnly.FromDateTime(DateTime.Now)} left");
+                Console.WriteLine($"you have {endTime - TimeOnly.FromDateTime(DateTime.Now)} left");
+                Console.WriteLine($"You are missing {selectedWords.Count()-correctlyGuessedWords.Count()}");
             }
             if (lives <= 0)
                 Console.WriteLine("\nYou ran out of lives\n");
