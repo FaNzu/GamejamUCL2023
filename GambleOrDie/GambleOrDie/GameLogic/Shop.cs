@@ -31,6 +31,7 @@ namespace GambleOrDie.GameLogic
 				{
 					Console.Clear();
 					Console.WriteLine("   _____ _                 \r\n  / ____| |                \r\n | (___ | |__   ___  _ __  \r\n  \\___ \\| '_ \\ / _ \\| '_ \\ \r\n  ____) | | | | (_) | |_) |\r\n |_____/|_| |_|\\___/| .__/ \r\n                    | |    \r\n                    |_|    ");
+					Console.WriteLine($"You're coins: {_player.Coins}");
 					Console.WriteLine("Use arrows and ENTER to navigate");
 					Console.WriteLine($"{(option == 0 ? decorator : "  ")}Buy Item \u001b[0m");
 					Console.WriteLine($"{(option == 1 ? decorator : "  ")}Back To Main Menu \u001b[0m");

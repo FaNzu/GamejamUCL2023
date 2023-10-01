@@ -7,7 +7,7 @@ using GambleOrDie.Model;
 
 namespace GambleOrDie.Games
 {
-    public class Anagram
+    public class Anagram : PuzzleGames
     {
 
         #region variables
