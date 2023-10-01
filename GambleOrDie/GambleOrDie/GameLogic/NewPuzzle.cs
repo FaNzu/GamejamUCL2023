@@ -111,7 +111,7 @@ namespace GambleOrDie.GameLogic
 						Console.Clear();
 
 						//should make a randomizer, or make a order of games to appear
-						if (StartRandomPuzzleGame())
+						if (StartRandomPuzzleGame(chosenItem))
 						{
 							VictoryScenario();
 						}
@@ -254,20 +254,22 @@ namespace GambleOrDie.GameLogic
 			return result;
 		}
 
-		public bool StartRandomPuzzleGame()
+		public bool StartRandomPuzzleGame(Item item)
 		{
-			bool result;
-			//Random random = new Random();
-			//switch (random.Next(0, 2))
-			//{
-			//	case 0:
-			result = WordPuzzle.board(difficulty);
-			//		break;
-			//	case 1:
-			//		break;
-			//	case 2:
-			//		break;
-			//}
+			bool result = false;
+			Random random = new Random();
+			switch (random.Next(0, 3))
+			{
+				case 0:
+					result = WordPuzzle.board(difficulty, item);
+					break;
+				case 1:
+					result = Anagram.board(difficulty, item);
+					break;
+				case 2:
+					result = Wordle.board(difficulty);
+					break;
+			}
 			return result;
 		}
 

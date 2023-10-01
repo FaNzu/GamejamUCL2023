@@ -29,6 +29,7 @@ namespace GambleOrDie.GameLogic
 				{
 					Console.Clear();
 					Console.WriteLine("   _____                 _     _         ____         _____  _      _ \r\n  / ____|               | |   | |       / __ \\       |  __ \\(_)    | |\r\n | |  __  __ _ _ __ ___ | |__ | | ___  | |  | |_ __  | |  | |_  ___| |\r\n | | |_ |/ _` | '_ ` _ \\| '_ \\| |/ _ \\ | |  | | '__| | |  | | |/ _ \\ |\r\n | |__| | (_| | | | | | | |_) | |  __/ | |__| | |    | |__| | |  __/_|\r\n  \\_____|\\__,_|_| |_| |_|_.__/|_|\\___|  \\____/|_|    |_____/|_|\\___(_)\r\n                                                                      \r\n                                                                      ");
+					Console.WriteLine($"Current score: {_player.Score}");
 					Console.WriteLine("Use arrows and ENTER to navigate");
 					Console.WriteLine($"{(option == 0 ? decorator : "  ")}Shop \u001b[0m");
 					Console.WriteLine($"{(option == 1 ? decorator : "  ")}Inventory \u001b[0m");
