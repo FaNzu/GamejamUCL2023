@@ -8,12 +8,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using GambleOrDie.Model;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace GambleOrDie.Games
 {
     public class Wordle
     {
+        private static Item iteminUse;
         private static List<string> Words = new List<string> {
             "adult", "agent", "anger", "apple", "award", "beach", "birth", "block", "chant", "banjo", "cough", "humor",
             "board", "brain", "bread", "break", "brown", "brand", "beast", "bench", "cello", "beans", "brave", "brass",
@@ -34,7 +36,7 @@ namespace GambleOrDie.Games
         public static bool board(int? difficultyGiven)
         {
             int difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
-
+            
 
             //Random Word Picker
             Random numberGen = new Random();

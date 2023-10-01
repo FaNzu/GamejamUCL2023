@@ -11,7 +11,7 @@ namespace GambleOrDie.Games
     {
 
         #region variables
-        private Item? itemInUse;
+        //private Item itemInUse;
         private static string[] allwords = {
                 "Elephant","Journey","Symphony","Rainbow",
                 "Library","Whistle","Weather","Mountain",
@@ -24,7 +24,7 @@ namespace GambleOrDie.Games
         #endregion
 
 
-        public static bool board(int? difficultyGiven)
+        public static bool board(int? difficultyGiven, Item givenItem)
         {
             Random random = new Random();
             difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
@@ -43,23 +43,23 @@ namespace GambleOrDie.Games
                     i--;
                 }
             }
-            bool victory = isValidGuess(difficulty);
+            bool victory = isValidGuess(difficulty, givenItem);
 
             return victory;
         }
 
-        private static bool isValidGuess(int difficulty)
+        private static bool isValidGuess(int difficulty, Item givenItem)
         {
             int timeToPlay = 120;
-            //switch (itemInUse.Effect)
-            //{
-            //    case Effects.TimeRemover:
-            //        timeToPlay -= 60;
-            //        break;
-            //    case Effects.TimeAdder:
-            //        timeToPlay += 60;
-            //        break;
-            //}
+            switch (givenItem.Effect)
+            {
+                case Effects.TimeRemover:
+                    timeToPlay -= 60;
+                    break;
+                case Effects.TimeAdder:
+                    timeToPlay += 60;
+                    break;
+            }
 
             int lives = 3; //adjust with difficulty
             if (difficulty <= 2)
