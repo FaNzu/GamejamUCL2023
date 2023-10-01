@@ -12,11 +12,6 @@ namespace GambleOrDie.Games
 {
     class WordPuzzle
     {
-        public WordPuzzle(Item givenItem)
-        {
-            itemInUse = givenItem;
-        }
-        public WordPuzzle() { }
 
         #region variables
         private static Item? itemInUse;
