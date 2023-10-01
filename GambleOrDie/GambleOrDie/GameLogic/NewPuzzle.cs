@@ -99,6 +99,10 @@ namespace GambleOrDie.GameLogic
 							if (UseItem())
 							{
 								chosenItem = GetItem();
+								if (chosenItem.Effect == Effects.TimeRemover)
+								{
+									multiplier = multiplier + 1;
+								}
 								Console.WriteLine($"Chosen item is: {chosenItem.Titel} - {chosenItem.Description}");
 							}
 							else if (UseItem())
@@ -281,7 +285,9 @@ namespace GambleOrDie.GameLogic
 			}
 			int choice = Convert.ToInt32(Console.ReadLine());
 
-			return _player.Items.Find(x => x.Id == choice);
+			Item itemToReturn = _player.Items.Find(x => x.Id == choice);
+			_player.Items.Remove(itemToReturn);
+			return itemToReturn;
 		}
 
 		public bool UseItem()

@@ -36,7 +36,7 @@ namespace GambleOrDie.Model
 			{
 				Effect = Effects.TimeRemover;
 				Titel = "Clock Decreaser 2000 Inator";
-				Description = "Decreases your timer by 1 minut";
+				Description = "Decreases your timer by 1 minut, but gives extra coins if you win a game";
 			}
 			else
 			{
