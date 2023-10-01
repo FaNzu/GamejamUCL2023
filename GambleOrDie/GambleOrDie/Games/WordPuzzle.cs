@@ -12,14 +12,8 @@ namespace GambleOrDie.Games
 {
     class WordPuzzle
     {
-        public WordPuzzle(Item givenItem)
-        {
-            itemInUse = givenItem;
-        }
-        public WordPuzzle() { }
 
         #region variables
-        private static Item? itemInUse;
         private static int width = 10;
         private static int height = 10;
         private static char[,] alrPlacedWords;
@@ -93,7 +87,7 @@ namespace GambleOrDie.Games
         }
 
 
-        public static bool board(int? difficultyGiven)
+        public static bool board(int? difficultyGiven, Item givenItem)
         {
             
             difficulty = difficultyGiven != null ? difficultyGiven.Value : 1;
@@ -143,19 +137,24 @@ namespace GambleOrDie.Games
             }
             bool victory = false;//game starts losing
             Console.WriteLine(stringBuilder);
-            victory = isValidInput(); //change victory if player won
+            victory = isValidInput(givenItem); //change victory if player won
             Console.WriteLine(victory.ToString());
             Console.ReadLine();
             return victory;
         }
 
-        private static bool isValidInput()
+        private static bool isValidInput(Item givenItem)
         {
             int timeToPlay = 120;
-            //if (itemInUse.Effect == Effects.TimeRemover)
-            //    timeToPlay -= 60;
-            //else if (itemInUse.Effect == Effects.TimeRemover)
-            //    timeToPlay += 60;
+            switch (givenItem.Effect)
+            {
+                case Effects.TimeRemover:
+                    timeToPlay -= 60;
+                    break;
+                case Effects.TimeAdder:
+                    timeToPlay += 60;
+                    break;
+            }
             TimeOnly startTime = TimeOnly.FromDateTime(DateTime.Now);
             TimeOnly endTime = startTime.Add(new TimeSpan(0, 0, timeToPlay)); //60 is time in total for puzzle
             int lives = 3; //adjust with difficulty

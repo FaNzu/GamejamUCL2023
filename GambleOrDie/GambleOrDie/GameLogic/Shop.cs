@@ -57,11 +57,20 @@ namespace GambleOrDie.GameLogic
 				{
 					case 0:
 						Item boughtItem = new Item();
-						_player.Coins = _player.Coins - boughtItem.Price;
-						_player.Items.Add(boughtItem);
-						Console.WriteLine("You've got lucky with this one!");
-						Console.WriteLine($"{boughtItem.Titel} - {boughtItem.Description}");
-						break; 
+						if (_player.Coins < boughtItem.Price)
+						{
+							Console.WriteLine("You dont have enough money noob");
+							break;
+						}
+						else
+						{
+							_player.Coins = _player.Coins - boughtItem.Price;
+							_player.Items.Add(boughtItem);
+							Console.WriteLine("You've got lucky with this one!");
+							Console.WriteLine($"{boughtItem.Titel} - {boughtItem.Description}");
+							break; 
+
+						}
 					case 1:
 						isSelected = true;
 						isFocused = false;
