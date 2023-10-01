@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GambleOrDie.Games
 {
-    public class Anagram
+    public class Anagram : PuzzleGames
     {
         private string[] allwords = {
                 "Elephant","Journey","Symphony","Rainbow",

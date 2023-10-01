@@ -8,13 +8,20 @@ namespace GambleOrDie.Model
 {
 	public class Item
 	{
+		public int Id { get; set; }
 		public string Titel { get; set; }
 		public string Description { get; set; }
 		public Effects Effect { get; set; }
 		public int Price { get; set; }
-		
+		private static int id = 0;
+		private static int GenerateId()
+		{
+			return id++;
+		}
+
 		public Item() 
 		{
+			Id = GenerateId();
 			Price = 25;
 			Random random= new Random();
 			int randomResult = random.Next(0,3);

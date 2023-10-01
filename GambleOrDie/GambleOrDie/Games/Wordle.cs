@@ -12,8 +12,8 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace GambleOrDie.Games
 {
-    public class Wordle
-    {
+    public class Wordle : PuzzleGames
+	{
         bool victory = false;
 
         public bool board(int? difficultyGiven)

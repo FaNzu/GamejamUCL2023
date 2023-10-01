@@ -9,8 +9,8 @@ using System.Timers;
 
 namespace GambleOrDie.Games
 {
-    class WordPuzzle
-    {
+    class WordPuzzle : PuzzleGame
+	{
         int width = 10;
         int height = 10;
         private static char[,] alrPlacedWords;

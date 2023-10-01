@@ -4,6 +4,7 @@ using GambleOrDie.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,6 +35,98 @@ namespace GambleOrDie.GameLogic
 			{
 				difficulty = 3;
 				multiplier = 4;
+			}
+		}
+
+		public void StartGamePuzzle()
+		{
+			Console.OutputEncoding = Encoding.UTF8;
+
+			Item chosenItem;
+			int option = 0;
+			string decorator = "➡️ \u001b[32m";
+			ConsoleKeyInfo key;
+			bool isSelected = false;
+			bool isFocused = true;
+
+			while (isFocused)
+			{
+				while (!isSelected)
+				{
+					Console.Clear();
+					Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
+					Console.WriteLine("Use arrows and ENTER to navigate");
+					Console.WriteLine($"{(option == 0 ? decorator : "  ")}Start New Game \u001b[0m");
+					Console.WriteLine($"{(option == 1 ? decorator : "  ")}Back To Menu \u001b[0m");
+
+					key = Console.ReadKey();
+
+					switch (key.Key)
+					{
+						case ConsoleKey.UpArrow:
+							option = option == 0 ? 1 : option - 1;
+							break;
+						case ConsoleKey.DownArrow:
+							option = option == 1 ? 0 : option + 1;
+							break;
+						case ConsoleKey.Enter:
+							isSelected = true;
+							break;
+					}
+				}
+				Console.Clear();
+				isSelected = false;
+				switch (option)
+				{
+					//START NEW GAME AND BET COINS
+					case 0:
+
+
+						Console.Clear();
+						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
+						Console.WriteLine($"Difficulty set to: {difficulty}");
+						Console.WriteLine($"Current coins: {_player.Coins}");
+						stake = BetCoins();
+						Console.Clear();
+						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
+						Console.WriteLine($"Difficulty set to: {difficulty}");
+						Console.WriteLine($"Current bet: {stake}");
+						Console.WriteLine($"Current coins: {_player.Coins}");
+
+						int choice = Convert.ToInt32(Console.ReadLine());
+
+						if (UseItem() == true)
+						{
+							chosenItem = GetItem(choice);
+							Console.WriteLine($"Chosen item is: {chosenItem.Titel} - {chosenItem.Description}");
+						}
+						else if (UseItem() == false)
+						{
+							Console.WriteLine("No item was chosen");
+						}
+						Console.WriteLine("Press ENTER to start the game");
+						Console.ReadLine();
+						Console.Clear();
+
+						//should make a randomizer, or make a order of games to appear
+						if (StartRandomPuzzleGame())
+						{
+							VictoryScenario();
+						}
+						else
+						{
+							DefeatScenario();
+						}
+						break;
+					//EXIT BACK TO MAIN MENU
+					case 1:
+						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
+						Console.WriteLine("Returning To Main Menu");
+						isSelected = true;
+						isFocused = false;
+						break;
+				}
+				Console.ReadKey();
 			}
 		}
 
@@ -158,86 +251,70 @@ namespace GambleOrDie.GameLogic
 			return result;
 		}
 
-		public void StartGamePuzzle()
+		public PuzzleGames StartRandomPuzzleGame()
 		{
-			Console.OutputEncoding = Encoding.UTF8;
-
-			int option = 0;
-			string decorator = "➡️ \u001b[32m";
-			ConsoleKeyInfo key;
-			bool isSelected = false;
-			bool isFocused = true;
-
-			while (isFocused)
+			Random random = new Random();
+			PuzzleGames result = new PuzzleGames();
+			switch (random.Next(0, 2))
 			{
-				while (!isSelected)
+				case 0:
+					Anagram anagram = new Anagram();
+					result = anagram;
+					break;
+				case 1:
+					Wordle wordle = new Wordle();
+					result = wordle;
+					break;
+				case 2:
+					WordPuzzle wordPuzzle = new WordPuzzle();
+					result = wordPuzzle;
+					break;
+			}
+			return result;
+		}
+
+		public Item GetItem(int choice)
+		{
+			foreach (Item item in _player.Items)
+			{
+				if (choice == item.Id)
 				{
 					Console.Clear();
-					Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
-					Console.WriteLine("Use arrows and ENTER to navigate");
-					Console.WriteLine($"{(option == 0 ? decorator : "  ")}Start New Game \u001b[0m");
-					Console.WriteLine($"{(option == 1 ? decorator : "  ")}Back To Menu \u001b[0m");
-
-					key = Console.ReadKey();
-
-					switch (key.Key)
+					Console.WriteLine("Chose item number");
+					foreach (Item item in _player.Items)
 					{
-						case ConsoleKey.UpArrow:
-							option = option == 0 ? 1 : option - 1;
-							break;
-						case ConsoleKey.DownArrow:
-							option = option == 1 ? 0 : option + 1;
-							break;
-						case ConsoleKey.Enter:
-							isSelected = true;
-							break;
+						Console.WriteLine($"{item.Id} - {item.Titel} - {item.Description}");
 					}
+					return item;
 				}
-				Console.Clear();
-				isSelected = false;
-				switch (option)
-				{
-					//START NEW GAME AND BET COINS
-					case 0:
-
-
-						Console.Clear();
-						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
-						Console.WriteLine($"Difficulty set to: {difficulty}");
-						Console.WriteLine($"Current coins: {_player.Coins}");
-						stake = BetCoins();
-						Console.Clear();
-						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
-						Console.WriteLine($"Difficulty set to: {difficulty}");
-						Console.WriteLine($"Current bet: {stake}");
-						Console.WriteLine($"Current coins: {_player.Coins}");
-						Console.WriteLine("Press ENTER to start the game");
-						Console.ReadLine();
-						Console.Clear();
-
-						//should make a randomizer, or make a order of games to appear
-						Wordle puzzle = new Wordle();
-						//Anagram puzzle = new Anagram();
-						//WordPuzzle puzzle = new WordPuzzle();
-						if (puzzle.board(1))
-						{
-							VictoryScenario();
-						}
-						else
-						{
-							DefeatScenario();
-						}
-						break;
-					//EXIT BACK TO MAIN MENU
-					case 1:
-						Console.WriteLine("  _   _                 _____               _      \r\n | \\ | |               |  __ \\             | |     \r\n |  \\| | _____      __ | |__) |   _ _______| | ___ \r\n | . ` |/ _ \\ \\ /\\ / / |  ___/ | | |_  /_  / |/ _ \\\r\n | |\\  |  __/\\ V  V /  | |   | |_| |/ / / /| |  __/\r\n |_| \\_|\\___| \\_/\\_/   |_|    \\__,_/___/___|_|\\___|\r\n                                                   \r\n                                                   ");
-						Console.WriteLine("Returning To Main Menu");
-						isSelected = true;
-						isFocused = false;
-						break;
-				}
-				Console.ReadKey();
 			}
+			return null;
+		}
+
+		public bool UseItem()
+		{
+			bool useItem = false;
+			bool whileNotChosen = true;
+			Console.WriteLine("Use item? (y/n)");
+			string input = Console.ReadLine();
+			while (whileNotChosen)
+			{
+				if (input == "y")
+				{
+					useItem = true;
+					whileNotChosen = false;
+				}
+				if (input == "n")
+				{
+					useItem = false;
+					whileNotChosen = false;
+				}
+				else
+				{
+					Console.WriteLine("Enter y or n (yes/no)");
+				}
+			}
+			return useItem;
 		}
 
 		public void VictoryScenario()
